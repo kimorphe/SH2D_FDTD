@@ -1,0 +1,99 @@
+<!doctype html>
+<head>
+	<meta charset="UTF-8">
+	<title>2D-FDTD (SH-wave)</title>
+</head>
+
+<body>
+	<center>
+		<h1> FDTD for Scalar 2D Wave Equation </h1>
+	</center>
+<br>
+
+<h2>C/C++プログラム</h2>
+	<ul>
+	<li>FDTD C++ Source </li>
+		<ul>
+		<li>Header files: <a href="./wveq2d.h">wveq2d.h</a> , 
+		<a href="./wave1d.h">wave1d.h</a> </li>
+		<li>Main Program: <a href="./main.cpp">main.cpp</a> </li>
+		<li>CNTRL  class: <a href="./cntrl.cpp">cntrl.cpp</a> </li>
+		<li>DOMAIN class: <a href="./domain.cpp">domain.cpp</a> </li>
+		<li>FIELD  class: <a href="./field.cpp">field.cpp</a> </li>
+		<li>SOURCE class: <a href="./source.cpp">source.cpp</a> </li>
+		<li>RECVR class: <a href="./receiver.cpp">receiver.cpp</a> </li>
+		<li>Waveform class: <a href="./wave1d.cpp">wave1d.cpp</a> </li>
+		<li>makefile: <a href="./makefile">makefile</a> </li>
+		</ul>
+	<li>Input Files:</li>
+		<ul>
+		<li> <a href="./geom.inp">geom.inp</a> </li>
+		<li> <a href="./tset.inp">tset.inp</a> </li>
+		<li> <a href="./inwv0.dat">inwv0.dat</a> </li>
+		<li> <a href="./src.inp">src.inp</a> </li>
+		<li> <a href="./recs.inp">recs.inp</a> </li>
+		</ul>
+	<li>Output Files:</li>
+		<ul>
+		<li> pr0.out</li>
+		</ul>
+	<li>Python Codes: </li>
+		<ul>
+			<li><a href="./kcell.py">kcell.py</a> </li>
+			<li><a href="./snap.py">snap.py</a>--> pr***.png </li>
+		</ul>
+	<li>Auxillary programs:</li>
+		<ul>
+			<li><a href="./pwlin.cpp">pwlin.cpp</a></li>
+		</ul>
+	<li>Subdirectory:</li>
+		<ul>
+			FFT: original waveform class and fft program 
+		</ul>
+	</ul>
+<h2>開発記録:</h2>
+	<ul>
+		<li>
+		8/31/2022(Wed.)<br>
+		DOMAIN:topographyを修正．<br>
+		形状に関するパラメータを外部ファイル(geom.inp)から読み込み．<br>
+		区分線形、区分一定関数が利用可能．上側、下側のいずれを切り落とすか選択可能.
+		</li>
+		<li>
+		9/1/2022(Thr.)<br>
+		複数ソースへ対応(src->*src).<br>
+		クラス配列要素の代入は注意が必要．
+		クラスの実体が参照されるように使用することを間違えないように．<br>
+		複数の波形タイプをinwv*.datからsrc毎に設定可能<br>
+		wave1d.cppをつかった入射波形生成(typeを負の数とした場合振幅が反転されるように修正)<br>
+		RECVR(観測点)クラスの追加
+		</li>
+		<li>
+		9/2/2022(Fri.)<br>
+		SOURCEクラスのインスタンスをCNTRLクラスの管理下へ移動</br>
+		B-scan出力のmethodを追加</br>
+		SROUCE, RECVRクラスのグリッド数カウント方法を修正
+		</li>
+	</ul>
+<h2>開発項目:</h2>
+	<ol>
+		<li><s>複数ソースの同時励起 </s>(9/1)<br>
+		</li>
+		<li><s>複数入射波形の利用</s>(9/1) -->  随伴場計算に必要
+		<li><s>観測点クラスの導入</s>(9/1)</li>
+		<li><s>RECVRクラスの仕上げ(grid数のカウント, 座標設定)</s>(9/2)</li>
+		<li><s>B-scan dataの外部ファイルへの書き出し</s> (9/2), 出力グリッドタイプの変更</li>
+		<li><s>SOURCEクラスのインスタンスをCNTRLクラスメンバへ移動</s>(9/2)</li>
+		<li>B-scan dataの可視化python script</li>
+		<li>時間ステップ設定窓口の統一</li>
+		<li>差分公式の確認</li>
+		<li>PML領域の追加</li>
+		<li>境界グリッドの重複した更新の防止</li>
+		<li>非均質性</li>
+		<li>物体力のオプション</li>
+		<li>傾いた境界からの入射(分布力の節点力への換算)</li>
+		<li>phased array (coordinated excitation)への対応</li>
+</ol>
+</body>
+</html>
+

@@ -1,0 +1,5 @@
+# nrec(number of receivers)
+ 2
+# type(1:v1, 2:v2), xyrec, wd (x/y-coordinate, width) nx(unit normal)
+ 1, 0.5, 0.5,  1
+ 2, 3.5, 0.5, -1

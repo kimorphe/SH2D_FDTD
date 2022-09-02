@@ -1,0 +1,7 @@
+# dt, Nt
+ 0.05, 100
+# Initial Condition 
+# field type(0:p, 1:v1, 2:v2)
+ 0
+# source parameters (xc[2],sig, intensity)
+ 2.5, 1.5, 0.1, 0.0
