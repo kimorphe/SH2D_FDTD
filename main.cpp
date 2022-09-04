@@ -13,25 +13,28 @@ int main(int argc, char *argv[]){
 	char frecs[128]="recs.inp";
 	ctr.setup_domain(fgeom);
 	ctr.time_setting(ftset);
-	ctr.src_setting(fsrce);
+		ctr.src_setting(fsrce);
 	ctr.wvfm_setting(finwv);
 	ctr.rec_setting(frecs);
 
 	
-	int isum=0;
+	int it,isum;
+	
+	isum=0;
 	ctr.v3.fwrite(isum++);
-
-	int it;
 	for(it=0; it<ctr.Nt; it++){
 		ctr.v2q(it); 
-		ctr.record(it);
+		//ctr.record(it);
 		ctr.q2v(it);
+		ctr.capture(it);
 		if((it+1)%10==0){
 			printf("it=%d,isum=%d\n",it,isum);
 		       	ctr.v3.fwrite(isum++);
 		};
 	};
-	for(int i=0; i<ctr.nrec; i++) ctr.recs[i].fwrite();
+	//for(int i=0; i<ctr.nrec; i++) ctr.recs[i].fwrite();
+	for(int i=0; i<ctr.nsrc; i++) ctr.srcs[i].fwrite();
+
 	return(0);
 
 };

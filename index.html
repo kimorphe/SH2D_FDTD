@@ -85,6 +85,11 @@
 		PML減衰係数を減衰量の見積もりから設定する形へ修正(従来通りの方法)<br>
 		PML分の計算領域拡張
 		</li>
+		<li>
+		9/4/2022(Sun.)<br>
+		斜角入射機能の追加<br>
+		SOURCEクラスの拡張-->T/R兼用（pulse echo mode）へ<br>
+		</li>
 	</ul>
 <h2>開発項目:</h2>
 	<ol>
@@ -99,15 +104,17 @@
 		<li><s>PML領域の追加</s>(9/2)</li>
 		<li><s>時間ステップ設定窓口の統一</s>(9/3)</li>
 		<li><s>PMLパラメータの設定方法、設定値の修正(減衰量から逆算)</s>(9/3)</li>
-		<li><s>PML分の計算領域拡張</s></li>
-		<li>B-scan dataの可視化python script</li>
-		<li>境界グリッドの重複した更新の防止</li>
-		<li>非均質性/異方性</li>
-		<li>物体力のオプション</li>
-		<li>傾いた境界からの入射(分布力の節点力への換算)</li>
+		<li><s>PML分の計算領域拡張</s>(9/3)</li>
+		<li><s>斜角入射</s>(9/4)</li>
+		<li><s>T/R兼用(pulse echo)のためのクラス(9/4)</s></li>
 		<li>coordinated excitation: SOURCEインスタンスを管理するARRAYクラスの作成</li>
+		<li>B-scan dataの可視化python script</li>
 		<li>snap.pyの効率化、colorbar追加</li>
 		<li>定式化メモの作成</li>
+		<li>境界グリッドの重複した更新の防止</li>
+		<li>物体力のオプション</li>
+		<li>非均質性/異方性</li>
+		<li>傾いた境界からの入射(分布力の節点力への換算)</li>
 </ol>
 <h2>References:</h2>
 	<ul>

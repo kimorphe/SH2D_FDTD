@@ -29,8 +29,19 @@ class FIELD{
 		int Nin,Nbnd,Nex;
 	private:
 };
+class ARRAY{
+	public:
+		int nele;	// number of array elements
+		int *actv;	// activation
+		double *a0;	// apodization
+		double *tdly;	// time delay
+		void init(int nn);
+		void print();
+	private:
+};
 class SOURCE{
 	public:
+		int ID;
 		double wd;
 		int ng;	// number of grids
 		void mem_alloc(int n);
@@ -40,6 +51,22 @@ class SOURCE{
 		void set(double x, double y, double w);
 		void print(double *Xa, double *dx);
 		int iwv;	// waveform number 
+		double Ctd;	// delay time gradient
+		bool Ton; // activated 
+		double *dx, *Xa;
+		double dt;
+		void set_inc_ang(double th, double ct);
+	private:
+};
+class TRNSDCR: public SOURCE{
+	public:
+		bool Ron; //activated
+		int Nt;
+		double dt;
+		void init_bwv(int n, double dtau);
+		double **bwv;
+		void record(int it, double **fld);
+		void fwrite();
 	private:
 };
 class RECVR{
@@ -99,9 +126,10 @@ class CNTRL{
 		DOMAIN dm;
 		FIELD v3,q1,q2; 
 		FIELD v3x,v3y;
-		SOURCE *srcs;		
+		TRNSDCR *srcs;		
 		RECVR *recs;
 		Wv1D *wvs;
+		ARRAY ary;
 		int nwv;
 		int nsrc;
 		int nrec;
@@ -114,6 +142,7 @@ class CNTRL{
 		void q2v(int it);
 		double CFL();
 		void record(int ii);
+		void capture(int ii);
 	private:
 };
 double pwfun(

@@ -145,28 +145,33 @@ int CNTRL::src_setting(char *fname){
 	int ityp;	// 1: v1-source, 2: v2-source
 	int nml;	// 1,-1 (normal vector, nx/ny)
 	int iwv;	// waveform No.
-	double xsrc,ysrc;
+	double xsrc,ysrc,ain;
 	int i,j,i1,i2,j1,j2,ng;
 	int isrc,jsrc,isum;
 
 	fgets(cbff,128,fp);
 	fscanf(fp,"%d\n",&nsrc);
-	srcs=(SOURCE *)malloc(sizeof(SOURCE)*nsrc);
+	//srcs=(SOURCE *)malloc(sizeof(SOURCE)*nsrc);
+	srcs=(TRNSDCR *)malloc(sizeof(TRNSDCR)*nsrc);
 	fgets(cbff,128,fp);
 	nwv=0;
 	for(int k=0; k<nsrc; k++){	// k-th source element
-		fscanf(fp,"%d, %lf, %lf, %d, %d\n",&ityp, &xy, &wdt, &nml, &iwv);
+		fscanf(fp,"%d, %lf, %lf, %d, %d, %lf\n",&ityp, &xy, &wdt, &nml, &iwv, &ain);
 		if(iwv>nwv) nwv=iwv;
+		srcs[k].ID=k;
 		srcs[k].nml=nml;
 		srcs[k].type=ityp;
 		srcs[k].iwv=iwv;
+		srcs[k].Xa=Xa;
+		srcs[k].dx=dx;
+		srcs[k].set_inc_ang(ain,ct);
 		w2=wdt*0.5;
 		isum=0;
 		switch(ityp){
 		case 1:	// v1-source
+			ng=ceil(wdt/dx[1]);
 			j1=int((xy-w2-Xa[1])/dx[1]);
-			j2=int((xy+w2-Xa[1])/dx[1]);
-			ng=j2-j1+1;
+			if(ng==0) ng=1;
 			srcs[k].mem_alloc(ng);
 			for(j=0; j<ng; j++){
 				jsrc=j+j1;
@@ -181,9 +186,9 @@ int CNTRL::src_setting(char *fname){
 			}
 			break;
 		case 2: // v2-source
+			ng=ceil(wdt/dx[0]);
 			i1=int((xy-w2-Xa[0])/dx[0]);
-			i2=int((xy+w2-Xa[0])/dx[0]);
-			ng=i2-i1+1;
+			if(ng==0) ng=1;
 			srcs[k].mem_alloc(ng);
 			for(i=0; i<ng; i++){
 				isrc=i+i1;
@@ -200,9 +205,20 @@ int CNTRL::src_setting(char *fname){
 		};
 		ng=isum;
 		srcs[k].print(Xa, dx);
+		srcs[k].init_bwv(Nt,dt);
 	}
 	nwv++;
 	printf("nwv=%d\n",nwv);
+	ary.init(nsrc);
+	fgets(cbff,128,fp);
+	int nmeas;
+	fscanf(fp,"%d\n",&nmeas);
+	fgets(cbff,128,fp);
+	for(i=0;i<nsrc;i++){
+		fscanf(fp,"%d, %lf, %lf\n",ary.actv+i, ary.a0+i, ary.tdly+i);
+	};
+	ary.print();
+
 	fclose(fp);
 	return(nwv);
 };
@@ -229,9 +245,11 @@ int CNTRL::rec_setting(char *fname){
 		isum=0;
 		switch(ityp){
 		case 1:	// v1-receiver
+			ng=ceil(wdt/dx[1]);
 			j1=int((xyrec-w2-Xa[1])/dx[1]);
-			j2=int((xyrec+w2-Xa[1])/dx[1]);
-			ng=j2-j1+1;
+			if(ng==0) ng=1;
+			//j2=int((xyrec+w2-Xa[1])/dx[1]);
+			//ng=j2-j1+1;
 			recs[ir].mem_alloc(ng);
 			for(j=0; j<ng; j++){
 				jrec=j+j1;
@@ -245,9 +263,11 @@ int CNTRL::rec_setting(char *fname){
 			}
 			break;
 		case 2: // v2-receiver
+			ng=ceil(wdt/dx[1]);
+			if(ng==0) ng=1;
 			i1=int((xyrec-w2-Xa[0])/dx[0]);
-			i2=int((xyrec+w2-Xa[0])/dx[0]);
-			ng=i2-i1+1;
+			//i2=int((xyrec+w2-Xa[0])/dx[0]);
+			//ng=i2-i1+1;
 			recs[ir].mem_alloc(ng);
 			for(i=0; i<ng; i++){
 				irec=i+i1;
@@ -275,6 +295,16 @@ void CNTRL::record(int jt){
 		type=recs[j].type;
 		if(type==1) recs[j].record(jt,q1.F);
 		if(type==2) recs[j].record(jt,q2.F);
+	}
+};
+
+void CNTRL::capture(int jt){
+	int i,j,type;
+	for(j=0;j<nsrc;j++){
+		//type=recs[j].type;
+		//if(type==1) recs[j].record(jt,q1.F);
+		//if(type==2) recs[j].record(jt,q2.F);
+		srcs[j].record(jt,v3.F);
 	}
 };
 double CNTRL::CFL(){
@@ -350,13 +380,16 @@ void CNTRL::v2q(int itime){
 
 	SOURCE src;
 
-	double bvl;
+	double bvl,tdly,tdly0,a0;
 	int sgn,sft,iwv;
 	for(int isrc=0;isrc<nsrc;isrc++){
-		src=srcs[isrc];
+		if(ary.actv[isrc]==0) continue;
+
+		src=srcs[isrc];	// SOURCE
 		iwv=src.iwv;
+		a0=ary.a0[isrc];
+		tdly0=ary.tdly[isrc];
 		//bvl=wvs[iwv].amp[itime];
-		bvl=wvs[iwv].val(itime*dt);
 		sft=1;
 		sgn=src.nml;
 		if(sgn ==-1) sft=0;
@@ -366,6 +399,8 @@ void CNTRL::v2q(int itime){
 			for(k=0; k<src.ng; k++){
 				i=src.isrc[k];
 				j=src.jsrc[k];
+				tdly=src.Ctd*k+tdly0;
+				bvl=wvs[iwv].val(itime*dt-tdly)*a0;
 				//dFx=sgn*(bvl-F[i-sft][j])/dx[0]*dt/rho;
 				//q1.F[i][j]+=dFx;
 				q1.F[i][j]=bvl*sgn;
@@ -375,6 +410,8 @@ void CNTRL::v2q(int itime){
 			for(k=0; k<src.ng; k++){
 				i=src.isrc[k];
 				j=src.jsrc[k];
+				tdly=src.Ctd*k+tdly0;
+				bvl=wvs[iwv].val(itime*dt-tdly)*a0;
 				//dFy=sgn*(bvl-F[i][j-sft])/dx[1]*dt/rho;
 				//q2.F[i][j]+=dFy;
 				q2.F[i][j]=bvl*sgn;
