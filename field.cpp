@@ -227,3 +227,9 @@ void FIELD::gen_indx0(int **kcell){
 	}
 	printf("Nin=%d Nbnd=%d Nex=%d\n",Nin,Nbnd,Nex);
 };
+void FIELD::clear(){
+	int i,j;
+	for(i=0;i<Ng[0];i++){ 
+		for(j=0;j<Ng[1];j++) F[i][j]=0.0;
+	};
+};

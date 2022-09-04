@@ -72,20 +72,27 @@ void TRNSDCR::fwrite(){
 	};
 	fclose(fp);
 };
-void ARRAY::init(int nn){
+void ARRAY::init(int nn, int nm){
 	nele=nn;
-	actv=(int *)malloc(sizeof(int)*nele);
-	a0=(double *)malloc(sizeof(double)*nele);
-	tdly=(double *)malloc(sizeof(double)*nele);
+	nmeas=nm;
+	actv=(int *)malloc(sizeof(int)*nele*nmeas);
+	a0=(double *)malloc(sizeof(double)*nele*nmeas);
+	tdly=(double *)malloc(sizeof(double)*nele*nmeas);
 
-	for(int i=0;i<nele;i++){
+	for(int i=0;i<nele*nmeas;i++){
 		actv[i]=0;
 		a0[i]=1.0;
 		tdly[i]=0.0;
 	};
+	i0=0;
 };
 void ARRAY::print(){
+	int k=0;
+	for(int j=0;j<nmeas;j++){
 	for(int i=0;i<nele;i++){
-		printf("i=%d, actv=%d, a0=%lf, tdly=%lf\n",i,actv[i],a0[i], tdly[i]);
-	};
+		printf("i=%d, actv=%d, a0=%lf, tdly=%lf\n",i,actv[k],a0[k], tdly[k]);
+		k++;
+	}
+	printf("\n");
+	}
 };

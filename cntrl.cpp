@@ -151,7 +151,6 @@ int CNTRL::src_setting(char *fname){
 
 	fgets(cbff,128,fp);
 	fscanf(fp,"%d\n",&nsrc);
-	//srcs=(SOURCE *)malloc(sizeof(SOURCE)*nsrc);
 	srcs=(TRNSDCR *)malloc(sizeof(TRNSDCR)*nsrc);
 	fgets(cbff,128,fp);
 	nwv=0;
@@ -209,6 +208,7 @@ int CNTRL::src_setting(char *fname){
 	}
 	nwv++;
 	printf("nwv=%d\n",nwv);
+/*
 	ary.init(nsrc);
 	fgets(cbff,128,fp);
 	int nmeas;
@@ -218,9 +218,41 @@ int CNTRL::src_setting(char *fname){
 		fscanf(fp,"%d, %lf, %lf\n",ary.actv+i, ary.a0+i, ary.tdly+i);
 	};
 	ary.print();
-
+*/
 	fclose(fp);
 	return(nwv);
+};
+void CNTRL::array_setting(char *fname){
+	FILE *fp=fopen(fname,"r");
+	char cbff[128];	
+	if(fp==NULL){
+		printf("File %s cannot found !\n",fname);
+		printf(" --> abort process..\n");
+		exit(-1);
+	};
+	int nele,nmeas;
+	fgets(cbff,128,fp);
+	fscanf(fp,"%d\n",&nele);
+	fgets(cbff,128,fp);
+	fscanf(fp,"%d\n",&nmeas);
+	if(nele != nsrc){
+		printf(" Error: nele(=%d) must be equal to nsrc(=%d) !\n",nele,nsrc);
+		exit(-1);
+	};
+	printf("nmeas=%d\n",nmeas);	
+
+	ary.init(nsrc,nmeas);
+	int i,j,k=0;
+	for(j=0;j<nmeas;j++){ 
+		fgets(cbff,128,fp);
+		for(i=0;i<nsrc;i++){
+			fscanf(fp,"%d, %lf, %lf\n",ary.actv+k, ary.a0+k, ary.tdly+k);
+			k++;
+		};
+	};
+	round=0;
+	ary.print();
+	fclose(fp);
 };
 int CNTRL::rec_setting(char *fname){
 	FILE *fp=fopen(fname,"r");
@@ -248,8 +280,6 @@ int CNTRL::rec_setting(char *fname){
 			ng=ceil(wdt/dx[1]);
 			j1=int((xyrec-w2-Xa[1])/dx[1]);
 			if(ng==0) ng=1;
-			//j2=int((xyrec+w2-Xa[1])/dx[1]);
-			//ng=j2-j1+1;
 			recs[ir].mem_alloc(ng);
 			for(j=0; j<ng; j++){
 				jrec=j+j1;
@@ -266,8 +296,6 @@ int CNTRL::rec_setting(char *fname){
 			ng=ceil(wdt/dx[1]);
 			if(ng==0) ng=1;
 			i1=int((xyrec-w2-Xa[0])/dx[0]);
-			//i2=int((xyrec+w2-Xa[0])/dx[0]);
-			//ng=i2-i1+1;
 			recs[ir].mem_alloc(ng);
 			for(i=0; i<ng; i++){
 				irec=i+i1;
@@ -300,12 +328,7 @@ void CNTRL::record(int jt){
 
 void CNTRL::capture(int jt){
 	int i,j,type;
-	for(j=0;j<nsrc;j++){
-		//type=recs[j].type;
-		//if(type==1) recs[j].record(jt,q1.F);
-		//if(type==2) recs[j].record(jt,q2.F);
-		srcs[j].record(jt,v3.F);
-	}
+	for(j=0;j<nsrc;j++) srcs[j].record(jt,v3.F);
 };
 double CNTRL::CFL(){
 	double dh=dx[0];
@@ -381,14 +404,16 @@ void CNTRL::v2q(int itime){
 	SOURCE src;
 
 	double bvl,tdly,tdly0,a0;
-	int sgn,sft,iwv;
+	int sgn,sft,iwv,i0;
+	i0=nsrc*round;
 	for(int isrc=0;isrc<nsrc;isrc++){
 		if(ary.actv[isrc]==0) continue;
 
-		src=srcs[isrc];	// SOURCE
+		src=srcs[isrc]; // SOURCE
 		iwv=src.iwv;
-		a0=ary.a0[isrc];
-		tdly0=ary.tdly[isrc];
+
+		a0=ary.a0[isrc+i0];
+		tdly0=ary.tdly[isrc+i0];
 		//bvl=wvs[iwv].amp[itime];
 		sft=1;
 		sgn=src.nml;
@@ -422,3 +447,10 @@ void CNTRL::v2q(int itime){
 
 };
 
+void CNTRL::clear(){
+	v3.clear();
+	q1.clear();
+	q2.clear();
+	v3x.clear();
+	v3y.clear();
+};

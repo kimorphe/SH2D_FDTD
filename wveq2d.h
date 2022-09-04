@@ -27,15 +27,18 @@ class FIELD{
 		void gen_indx2(int **kcell);
 		int *kbnd, *kint;
 		int Nin,Nbnd,Nex;
+		void clear();
 	private:
 };
 class ARRAY{
 	public:
 		int nele;	// number of array elements
+		int nmeas;	
 		int *actv;	// activation
 		double *a0;	// apodization
 		double *tdly;	// time delay
-		void init(int nn);
+		void init(int ne, int nm);
+		int i0;
 		void print();
 	private:
 };
@@ -130,6 +133,7 @@ class CNTRL{
 		RECVR *recs;
 		Wv1D *wvs;
 		ARRAY ary;
+		int round;
 		int nwv;
 		int nsrc;
 		int nrec;
@@ -138,11 +142,13 @@ class CNTRL{
 		void wvfm_setting(char *fname);
 		int src_setting(char *fname);
 		int rec_setting(char *fname);
+		void array_setting(char *fname);
 		void v2q(int it);
 		void q2v(int it);
 		double CFL();
 		void record(int ii);
 		void capture(int ii);
+		void clear();
 	private:
 };
 double pwfun(

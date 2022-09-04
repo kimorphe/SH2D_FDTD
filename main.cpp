@@ -11,15 +11,19 @@ int main(int argc, char *argv[]){
 	char finwv[128]="inwv0.dat";
 	char fsrce[128]="src.inp";
 	char frecs[128]="recs.inp";
+	char farry[128]="array.inp";
+
 	ctr.setup_domain(fgeom);
 	ctr.time_setting(ftset);
 		ctr.src_setting(fsrce);
 	ctr.wvfm_setting(finwv);
-	ctr.rec_setting(frecs);
+	//ctr.rec_setting(frecs);
+	ctr.array_setting(farry);
+	
+	int it,isum,m;
+	
+	for(m=0;m<ctr.ary.nmeas;m++){
 
-	
-	int it,isum;
-	
 	isum=0;
 	ctr.v3.fwrite(isum++);
 	for(it=0; it<ctr.Nt; it++){
@@ -34,6 +38,10 @@ int main(int argc, char *argv[]){
 	};
 	//for(int i=0; i<ctr.nrec; i++) ctr.recs[i].fwrite();
 	for(int i=0; i<ctr.nsrc; i++) ctr.srcs[i].fwrite();
+
+	ctr.round++;
+	ctr.clear();
+	}
 
 	return(0);
 
