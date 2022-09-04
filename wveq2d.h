@@ -64,33 +64,41 @@ class RECVR{
 };
 class DOMAIN{
 	public:
-		double *Xa, *Wd, *dx; 
-		int **kcell;
-		int *Ndiv,ndat;
-		void init(int *Ndiv);
-		void setup(double *Xa, double *Wd, double *dx);
-		double xf[2];
-		double *ij2xf(int i, int j, int type);
-		void print_kcell();
-		void print_prms();
-		double cp;
-		double dt;
-		void perfo_ellip(char *fname);
-		void out_kcell();
-		void topography(char *fname);
-		int find_v1bnd(int nx, double y);
-		int find_v2bnd(int ny, double x);
-		int nsrc;
+		double *Xa, *Wd, *dx; 	// domain location, width, cell size
+		double *Ha, *Hb;	// PML thickness 
+		int **kcell; 	// geometry ( binary image )
+		int *Ndiv,ndat; // number of cells 
+		void init(int *Ndiv); // allocate 2D kcell array
+		void setup(double *Xa, double *Wd, double *dx); // set domain size
+		double xf[2]; // grid coordinate
+		double *ij2xf(int i, int j, int type); 
+		void print_kcell(); //print kcell data
+		void print_prms();// print domain related parameters
+		double ct;	// phase velocity
+		double rho,amu; // density, shear rigidity
+		double dt;	// time step
+		void perfo_ellip(char *fname); // domain perforation
+		void out_kcell(); // write geometry(kcell) data
+		void topography(char *fname); // set surface topography
+		int find_q1bnd(int nx, double y); // find boundary v1-grid 
+		int find_q2bnd(int ny, double x); // find boundary v2-grid
+		int nsrc; // number of source elements
+		double PML_dcy(int idir, double xy); // evaluate PML decay constant 
+		void PML_setup(double gm);
+		double A0[2],B0[2];
 	private:
 };
 class CNTRL{
 	public:
-		double cp,rho,almb;
+		double ct,rho,amu; 
 		double Xa[2],Wd[2],dx[2];
 		int Ndiv[2],Nt;
-		double dt;
+		double Ha[2], Hb[2];
+		int NHa[2], NHb[2];
+		double dt,Tf;
 		DOMAIN dm;
-		FIELD pr,v1,v2; 
+		FIELD v3,q1,q2; 
+		FIELD v3x,v3y;
 		SOURCE *srcs;		
 		RECVR *recs;
 		Wv1D *wvs;
@@ -102,8 +110,8 @@ class CNTRL{
 		void wvfm_setting(char *fname);
 		int src_setting(char *fname);
 		int rec_setting(char *fname);
-		void p2v(int it);
-		void v2p(int it);
+		void v2q(int it);
+		void q2v(int it);
 		double CFL();
 		void record(int ii);
 	private:

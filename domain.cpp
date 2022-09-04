@@ -6,19 +6,19 @@
 
 double* DOMAIN::ij2xf(int i, int j, int type){
 
-	if(type==0){	// midpoint grid 
+	if(type==0){	// v3 (midpoint) grid 
 		xf[0]=Xa[0]+(i+0.5)*dx[0];
 		xf[1]=Xa[1]+(j+0.5)*dx[1];
 		return(xf);
 	};
 
-	if(type==1){ // v1-grid  (leftword shifted grid)
+	if(type==1){ // q1-grid  (leftword shifted grid)
 		xf[0]=Xa[0]+i*dx[0];
 		xf[1]=Xa[1]+(j+0.5)*dx[1];
 		return(xf);
 	};
 
-	if(type==2){ // v2-grid (upward shifted grid)
+	if(type==2){ // q2-grid (upward shifted grid)
 		xf[0]=Xa[0]+(i+0.5)*dx[0];
 		xf[1]=Xa[1]+j*dx[1];
 		return(xf);
@@ -29,7 +29,8 @@ double* DOMAIN::ij2xf(int i, int j, int type){
 		xf[1]=Xa[1]+j*dx[1];
 		return(xf);
 	};
-}	
+	return(NULL);
+};	
 void DOMAIN::setup(double *xll, double *wdt, double *dh){
 	Xa=xll;
 	Wd=wdt;
@@ -166,6 +167,8 @@ void DOMAIN::topography(char *fname){
 		}	
 	}
 	};
+	free(xknot);
+	free(yknot);
 	fclose(fp);
 
 };
@@ -178,7 +181,6 @@ double pwfun(
 ){
 
 	int idiv=0;
-	while(xknot[idiv]<=x) idiv++;
 
 	for(idiv=0; idiv<ndiv; idiv++){
 		if(xknot[idiv]>x) break;
@@ -201,7 +203,7 @@ double pwfun(
 
 	return(y*y0);
 };
-int DOMAIN::find_v1bnd(int nx, double y){
+int DOMAIN::find_q1bnd(int nx, double y){
 
 	int jy=int((y-Xa[1])/dx[1]);
 	int i,ibnd,il,ir;
@@ -233,7 +235,7 @@ int DOMAIN::find_v1bnd(int nx, double y){
 	};
 	return(ibnd);
 };
-int DOMAIN::find_v2bnd(int ny, double x){
+int DOMAIN::find_q2bnd(int ny, double x){
 	int ix=int((x-Xa[0])/dx[0]);
 	int j,jbnd,iu,id;
 
@@ -265,3 +267,33 @@ int DOMAIN::find_v2bnd(int ny, double x){
 	};
 	return(jbnd);
 };
+void DOMAIN::PML_setup(double gmm){
+	double L;
+	int m=2;
+	double eps=1.e-10;
+	for(int i=0; i<2; i++){
+		L=2.*Ha[i];
+		A0[i]=0.0; 
+		if(L>eps) A0[i]=-(m+1)*ct/pow(L,m+1)*logf(gmm);
+
+		L=2.*Hb[i];
+		B0[i]=0.0; 
+		if(L>eps) B0[i]=-(m+1)*ct/pow(L,m+1)*logf(gmm);
+	};
+};
+double DOMAIN::PML_dcy(int idir, double xy){ // direction: idir=0(x), 1(y)
+	double r;
+	double s=0.0,C0=0.0;
+	r=Xa[idir]+Ha[idir]-xy;
+	if(r > 0.0){
+		s=r;
+		C0=A0[idir];
+	};
+	r=xy-(Xa[idir]+Wd[idir]-Hb[idir]);
+	if(r > 0.0){
+		s=r;
+		C0=B0[idir];
+	}
+	return(C0*s*s);
+};
+

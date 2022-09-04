@@ -1,5 +1,7 @@
 # nsrc(number of source element)
- 2
+ 1
 # type(1:v1, 2:v2), xysrc, wd (x/y-coordinate, width) nx(unit normal), wvfm No.
- 2, 2.5, 0.2, -1,  0 
+ 2, 3.0, 0.3, 1,  0 
+
  1, 1.5, 0.2,  1,  1 
+ 2, 2.5, 0.2, -1,  0 

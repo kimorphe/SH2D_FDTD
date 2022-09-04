@@ -6,9 +6,9 @@
 //--------------------------------------------------------------------------
 void FIELD::fwrite(int num){
 	char fname[128];
-	if(type==0) sprintf(fname,"pr%d.out",num);
-	if(type==1) sprintf(fname,"v1%d.out",num);
-	if(type==2) sprintf(fname,"v2%d.out",num);
+	if(type==0) sprintf(fname,"v3_%d.out",num);
+	if(type==1) sprintf(fname,"q1_%d.out",num);
+	if(type==2) sprintf(fname,"q2_%d.out",num);
 	FILE *fp=fopen(fname,"w");
 	int i,j;
 
@@ -82,11 +82,11 @@ void FIELD::init(int *ndiv, int ityp){
 
 	ofst[0]=0.5;
 	ofst[1]=0.5;
-	if(type==1){	// v1-grid
+	if(type==1){	// q1-grid
 		ofst[0]=0.0;
 		Ng[0]+=1;
 	};
-	if(type==2){	// v2-grid
+	if(type==2){	// q2-grid
 		ofst[1]=0.0;
 		Ng[1]+=1;
 	}
@@ -114,7 +114,7 @@ void FIELD::setup(double *xa, double *wdt, double *dh){
 	dx=dh;
 };
 
-//		GENERATE 1D INDEX FOR v1 
+//		GENERATE 1D INDEX FOR q1 
 void FIELD::gen_indx1(int **kcell){
 	int i,j;
 	int il,ir;
@@ -154,7 +154,7 @@ void FIELD::gen_indx1(int **kcell){
 	}
 	printf("Nin=%d Nbnd=%d Nex=%d\n",Nin,Nbnd,Nex);
 };
-//		GENERATE 1D INDEX FOR v2 
+//		GENERATE 1D INDEX FOR q2 
 void FIELD::gen_indx2(int **kcell){
 	int i,j;
 	int iu,id;
@@ -193,7 +193,7 @@ void FIELD::gen_indx2(int **kcell){
 	}
 	printf("Nin=%d Nbnd=%d Nex=%d\n",Nin,Nbnd,Nex);
 };
-//		GENERATE 1D INDEX FOR pr 
+//		GENERATE 1D INDEX FOR v3 
 void FIELD::gen_indx0(int **kcell){
 	int i,j;
 

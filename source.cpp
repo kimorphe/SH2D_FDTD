@@ -2,26 +2,6 @@
 #include<stdlib.h>
 #include"wveq2d.h"
 
-/*
-void SOURCE::rng(double *dx, double *Xa){
-
-	switch(type){
-	case 1:
-		xs1[0]=Xa[0]+dx[0]*(isrc[0]);
-		xs2[0]=Xa[0]+dx[0]*(isrc[ng-1]);
-		xs1[1]=Xa[1]+dx[1]*(jsrc[0]+0.5);
-		xs2[1]=Xa[1]+dx[1]*(jsrc[ng-1]+0.5);
-		break;
-	case 2:
-		xs1[0]=Xa[0]+dx[0]*(isrc[0]+0.5);
-		xs2[0]=Xa[0]+dx[0]*(isrc[ng-1]+0.5);
-		xs1[1]=Xa[1]+dx[1]*(jsrc[0]);
-		xs2[1]=Xa[1]+dx[1]*(jsrc[ng-1]);
-		break;
-	}
-
-};
-*/
 void SOURCE::print(double *Xa, double *dx){
 	printf("----------- Source Parameters -----------\n");
 	printf("ng=%d\n",ng);

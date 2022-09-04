@@ -19,19 +19,19 @@ int main(int argc, char *argv[]){
 
 	
 	int isum=0;
-	ctr.pr.fwrite(isum++);
+	ctr.v3.fwrite(isum++);
 
 	int it;
 	for(it=0; it<ctr.Nt; it++){
-		ctr.p2v(it); 
+		ctr.v2q(it); 
 		ctr.record(it);
-		ctr.v2p(it);
+		ctr.q2v(it);
 		if((it+1)%10==0){
 			printf("it=%d,isum=%d\n",it,isum);
-		       	ctr.pr.fwrite(isum++);
+		       	ctr.v3.fwrite(isum++);
 		};
 	};
-	for(int i=0;i <ctr.nrec;i++) ctr.recs[i].fwrite();
+	for(int i=0; i<ctr.nrec; i++) ctr.recs[i].fwrite();
 	return(0);
 
 };

@@ -65,6 +65,7 @@ class Wv1D{
 		Wv1D(int Nt);
 		Wv1D(char *fname);
 
+		double val(double tt);
 		int load(char fname[128]);
 		void print_info();
 		bool mllc;
@@ -85,7 +86,8 @@ class Wv1D{
 		double gdelay();
 
 		InWv awv;
-		void gen_wv(char fname[128]);
+		//void gen_wv(char fname[128]);
+		void gen_wv(char *fname);
 	private:
 	protected:
 };

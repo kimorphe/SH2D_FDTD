@@ -6,11 +6,11 @@
 
 <body>
 	<center>
-		<h1> FDTD for Scalar 2D Wave Equation </h1>
+		<h1> FDTD for 2D Scalar Wave Equation </h1>
 	</center>
 <br>
 
-<h2>C/C++プログラム</h2>
+<h2>C/C++ Programs</h2>
 	<ul>
 	<li>FDTD C++ Source </li>
 		<ul>
@@ -40,7 +40,7 @@
 	<li>Python Codes: </li>
 		<ul>
 			<li><a href="./kcell.py">kcell.py</a> </li>
-			<li><a href="./snap.py">snap.py</a>--> pr***.png </li>
+			<li><a href="./snap.py">snap.py</a>--> v3_***.png </li>
 		</ul>
 	<li>Auxillary programs:</li>
 		<ul>
@@ -72,7 +72,18 @@
 		9/2/2022(Fri.)<br>
 		SOURCEクラスのインスタンスをCNTRLクラスの管理下へ移動</br>
 		B-scan出力のmethodを追加</br>
-		SROUCE, RECVRクラスのグリッド数カウント方法を修正
+		SROUCE, RECVRクラスのグリッド数カウント方法を修正<br>
+		差分公式の確認(PMLがある場合の差分方程式系)<br>
+		PML領域の導入<br>
+		境界条件の設定を修正(Neumann条件を直接指定)<br>
+		gitへの登録<br>
+		SH波にふさわしい変数名への変更(pr-->v3, v1--> q1, v2--> q2 )
+		</li>
+		<li>
+		9/3/2022(Sat.)<br>
+		時間ステップの設定窓口を統一( tset.inpで時間範囲を設定、Wv1Dインスタンスからval(double)methodで振幅取得)<br>
+		PML減衰係数を減衰量の見積もりから設定する形へ修正(従来通りの方法)<br>
+		PML分の計算領域拡張
 		</li>
 	</ul>
 <h2>開発項目:</h2>
@@ -84,16 +95,26 @@
 		<li><s>RECVRクラスの仕上げ(grid数のカウント, 座標設定)</s>(9/2)</li>
 		<li><s>B-scan dataの外部ファイルへの書き出し</s> (9/2), 出力グリッドタイプの変更</li>
 		<li><s>SOURCEクラスのインスタンスをCNTRLクラスメンバへ移動</s>(9/2)</li>
+		<li><s>差分公式の確認</s>(9/2)</li>
+		<li><s>PML領域の追加</s>(9/2)</li>
+		<li><s>時間ステップ設定窓口の統一</s>(9/3)</li>
+		<li><s>PMLパラメータの設定方法、設定値の修正(減衰量から逆算)</s>(9/3)</li>
+		<li><s>PML分の計算領域拡張</s></li>
 		<li>B-scan dataの可視化python script</li>
-		<li>時間ステップ設定窓口の統一</li>
-		<li>差分公式の確認</li>
-		<li>PML領域の追加</li>
 		<li>境界グリッドの重複した更新の防止</li>
-		<li>非均質性</li>
+		<li>非均質性/異方性</li>
 		<li>物体力のオプション</li>
 		<li>傾いた境界からの入射(分布力の節点力への換算)</li>
-		<li>phased array (coordinated excitation)への対応</li>
+		<li>coordinated excitation: SOURCEインスタンスを管理するARRAYクラスの作成</li>
+		<li>snap.pyの効率化、colorbar追加</li>
+		<li>定式化メモの作成</li>
 </ol>
+<h2>References:</h2>
+	<ul>
+		<li>
+		<a href="http://www.ic.daito.ac.jp/~mizutani/html/mathexpress.html" target="blank">HTMLでの数式表示(Latexを使うための方法)</a>
+		</li>
+	</ul>
 </body>
 </html>
 

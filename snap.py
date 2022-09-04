@@ -47,8 +47,10 @@ if __name__=="__main__":
     fig=plt.figure()
     ax=fig.add_subplot(111)
 
-    for k in range(10):
-        fname="pr"+str(k)+".out"
+    nums=np.arange(0,21,1)
+    print(nums)
+    for k in nums:
+        fname="v3_"+str(k)+".out"
         F.load(fname)
         F.show(ax)
         fname=fname.replace("out","png")

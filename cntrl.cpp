@@ -17,37 +17,80 @@ void CNTRL::setup_domain(char *fname){
 	fscanf(fp,"%d, %d\n",Ndiv,Ndiv+1);	// number of cells along x & y axes
 
 	fgets(cbff,128,fp);
-	fscanf(fp,"%lf, %lf\n",&cp, &rho);
-	almb=rho*cp*cp;
+	fscanf(fp,"%lf, %lf\n",&ct, &rho);
+	amu=rho*ct*ct;
 
-	printf("cp=%lf, rho=%lf\n",cp,rho);
+	fgets(cbff,128,fp);
+	fscanf(fp,"%lf, %lf\n",Ha,Ha+1);	// PML thickness 
+	fscanf(fp,"%lf, %lf\n",Hb,Hb+1); 	// PML thickness
+
 	fclose(fp);
 
 	dx[0]=Wd[0]/Ndiv[0];
 	dx[1]=Wd[1]/Ndiv[1];
+
+	// domain extention 
+	for(int i=0; i<2; i++){
+		NHa[i]=ceil(Ha[i]/dx[i]);
+		NHb[i]=ceil(Hb[i]/dx[i]);
+		Ha[i]=dx[i]*NHa[i];
+		Hb[i]=dx[i]*NHb[i];
+
+		Xa[i]-=Ha[i];
+		Wd[i]=Wd[i]+Ha[i]+Hb[i];
+		Ndiv[i]=Ndiv[i]+NHa[i]+NHb[i];
+	}
+
 	dm.setup(Xa,Wd,dx);
+	dm.ct=ct; dm.rho=rho; dm.amu=amu;
 	dm.init(Ndiv);
+
+	double gmm=1.e-04;	// expected decay 
+	dm.Ha=Ha;
+	dm.Hb=Hb;
+	dm.PML_setup(gmm);
+
+	int i;
+	FILE *ftmp=fopen("log.txt","w");
+	double tmp;
+	for(i=0; i<Ndiv[0]; i++){
+		tmp=Xa[0]+dx[0]*(i+0.5);
+		fprintf(ftmp,"%lf, %lf\n",tmp,dm.PML_dcy(0,tmp));
+	}
+	fprintf(ftmp,"\n");
+	for(i=0; i<Ndiv[1]; i++){
+		tmp=Xa[1]+dx[1]*(i+0.5);
+		fprintf(ftmp,"%lf, %lf\n",tmp,dm.PML_dcy(1,tmp));
+	}
+	fclose(ftmp);
 
 	dm.perfo_ellip(fname);
 	dm.topography(fname);
 	dm.out_kcell();
 	
 	// Setup staggered grid system 
-	pr.init(Ndiv,0);	
-	v1.init(Ndiv,1);	
-	v2.init(Ndiv,2);	
-	pr.setup(Xa,Wd,dx);
-	v1.setup(Xa,Wd,dx);
-	v2.setup(Xa,Wd,dx);
+	v3.init(Ndiv,0);	
+	v3x.init(Ndiv,0);	
+	v3y.init(Ndiv,0);	
+	q1.init(Ndiv,1);	
+	q2.init(Ndiv,2);	
+
+	v3.setup(Xa,Wd,dx);
+	v3x.setup(Xa,Wd,dx);
+	v3y.setup(Xa,Wd,dx);
+	q1.setup(Xa,Wd,dx);
+	q2.setup(Xa,Wd,dx);
 
 	//dm.print_prms();
-	//pr.print_prms();
-	//v1.print_prms();
-	//v2.print_prms();
+	//v3.print_prms();
+	//q1.print_prms();
+	//q2.print_prms();
 	
-	pr.gen_indx0(dm.kcell);
-	v1.gen_indx1(dm.kcell);
-	v2.gen_indx2(dm.kcell);
+	v3.gen_indx0(dm.kcell);
+	v3x.gen_indx0(dm.kcell);
+	v3y.gen_indx0(dm.kcell);
+	q1.gen_indx1(dm.kcell);
+	q2.gen_indx2(dm.kcell);
 
 };
 
@@ -56,8 +99,10 @@ void CNTRL::time_setting(char *fname){
 	char cbff[128];	
 
 	fgets(cbff,128,fp);
-	fscanf(fp,"%lf, %d\n",&dt, &Nt);
-	printf("dt=%lf, Nt=%d\n",dt,Nt);
+	//fscanf(fp,"%lf, %d\n",&dt, &Nt);
+	fscanf(fp,"%lf, %d\n",&Tf, &Nt);
+	dt=Tf/(Nt-1);
+	printf("dt=%lf, Nt=%d, Tf=%lf\n",dt,Nt,Tf);
 //	dm.CFL(dt);
 	CNTRL::CFL();
 
@@ -70,9 +115,9 @@ void CNTRL::time_setting(char *fname){
 	fscanf(fp,"%lf, %lf, %lf, %lf\n",&xs,&ys,&sig,&f0);
 	printf("xs=(%lf, %lf), sig=%lf, p0=%lf\n",xs,ys,sig,f0);
 
-	if(ftyp==0) pr.set_IC(xs,ys,sig,f0);
-	if(ftyp==1) v1.set_IC(xs,ys,sig,f0);
-	if(ftyp==2) v2.set_IC(xs,ys,sig,f0);
+	if(ftyp==0) v3.set_IC(xs,ys,sig,f0);
+	if(ftyp==1) q1.set_IC(xs,ys,sig,f0);
+	if(ftyp==2) q2.set_IC(xs,ys,sig,f0);
 	//pr.fwrite(0);
 
 	fclose(fp);
@@ -82,7 +127,6 @@ void CNTRL::wvfm_setting(char *fname){
 
 	for(int i=0;i<nwv;i++){
 		sprintf(fname,"inwv%d.dat",i);
-		printf("fname=%s\n",fname);
 		wvs[i].gen_wv(fname);
 	}
 	
@@ -129,7 +173,7 @@ int CNTRL::src_setting(char *fname){
 				if(jsrc<0) continue;
 				if(jsrc>=Ndiv[1]) break;
 				ysrc=Xa[1]+(jsrc+0.5)*dx[1];
-				isrc=dm.find_v1bnd(nml,ysrc);
+				isrc=dm.find_q1bnd(nml,ysrc);
 				srcs[k].isrc[isum]=isrc;
 				srcs[k].jsrc[isum]=jsrc;
 				srcs[k].ksrc[isum]=isrc+(Ndiv[1]+1)*jsrc;
@@ -146,7 +190,7 @@ int CNTRL::src_setting(char *fname){
 				if(isrc<0) continue;
 				if(isrc>=Ndiv[0]) break;
 				xsrc=Xa[0]+(0.5+isrc)*dx[0];
-				jsrc=dm.find_v2bnd(nml,xsrc);
+				jsrc=dm.find_q2bnd(nml,xsrc);
 				srcs[k].isrc[isum]=isrc;
 				srcs[k].jsrc[isum]=jsrc;
 				srcs[k].ksrc[isum]=isrc+(Ndiv[1]+1)*jsrc;
@@ -194,7 +238,7 @@ int CNTRL::rec_setting(char *fname){
 				if(jrec<0) continue;
 				if(jrec>=Ndiv[1]) break;
 				yrec=Xa[1]+(jrec+0.5)*dx[1];
-				irec=dm.find_v1bnd(nml,yrec);
+				irec=dm.find_q1bnd(nml,yrec);
 				recs[ir].irec[isum]=irec;
 				recs[ir].jrec[isum]=jrec;
 				isum++;
@@ -210,7 +254,7 @@ int CNTRL::rec_setting(char *fname){
 				if(irec<0) continue;
 				if(irec>=Ndiv[0]) break;
 				xrec=Xa[0]+(0.5+irec)*dx[0];
-				jrec=dm.find_v2bnd(nml,xrec);
+				jrec=dm.find_q2bnd(nml,xrec);
 				recs[ir].irec[isum]=irec;
 				recs[ir].jrec[isum]=jrec;
 				isum++;
@@ -229,8 +273,8 @@ void CNTRL::record(int jt){
 	int i,j,type;
 	for(j=0;j<nrec;j++){
 		type=recs[j].type;
-		if(type==1) recs[j].record(jt,v1.F);
-		if(type==2) recs[j].record(jt,v2.F);
+		if(type==1) recs[j].record(jt,q1.F);
+		if(type==2) recs[j].record(jt,q2.F);
 	}
 };
 double CNTRL::CFL(){
@@ -238,7 +282,7 @@ double CNTRL::CFL(){
 	double Crt;
 	if(dh >dx[1]) dh=dx[1];
 	dh=sqrt(dx[0]*dx[0]+dx[1]*dx[1]);
-	Crt=cp*dt/dh;
+	Crt=ct*dt/dh;
 	printf("Crt=%lf\n",Crt);
 	if(Crt>1.0){
 		printf(" stability condition is not satisfied !!\n --> abort proces\n");
@@ -246,77 +290,94 @@ double CNTRL::CFL(){
 	};
 	return(Crt);
 };
-void CNTRL::v2p(int itime){
-	int i,j;
+void CNTRL::q2v(int itime){
+	int i,j,k,l;
 	int nx,ny;
 	double **F1,**F2;
-
-	nx=pr.Ng[0];
-	ny=pr.Ng[1];
-	F1=v1.F;
-	F2=v2.F;
 	double dFx, dFy;
-	int k,l;
-	for(k=0;k<pr.Nin;k++){
-		l=pr.kint[k];
-		pr.l2ij(l,&i,&j);
-		dFx=(F1[i+1][j]-F1[i][j])/dx[0]*dt*almb;
-		dFy=(F2[i][j+1]-F2[i][j])/dx[1]*dt*almb;
-		pr.F[i][j]+=(dFx+dFy);
+	double beta,gmm, *xcod;
+
+	nx=v3.Ng[0];
+	ny=v3.Ng[1];
+	F1=q1.F;
+	F2=q2.F;
+
+	for(k=0; k<v3.Nin; k++){
+		l=v3.kint[k];
+		v3.l2ij(l,&i,&j);
+		xcod=dm.ij2xf(i,j,0);
+
+		beta=0.5*dt*dm.PML_dcy(0,xcod[0]);
+		gmm=dt/(rho*dx[0]);
+		dFx=(F1[i+1][j]-F1[i][j])*gmm;
+		v3x.F[i][j]=((1.-beta)*v3x.F[i][j]+dFx)/(1.+beta);
+
+		beta=0.5*dt*dm.PML_dcy(1,xcod[1]);
+		gmm=dt/(rho*dx[1]);
+		dFy=(F2[i][j+1]-F2[i][j])*gmm;
+		v3y.F[i][j]=((1.-beta)*v3y.F[i][j]+dFy)/(1.+beta);
+
+		//v3.F[i][j]+=(dFx+dFy);
+		v3.F[i][j]=v3x.F[i][j]+v3y.F[i][j];
 	}
 };
-void CNTRL::p2v(int itime){
-	int i,j;
+void CNTRL::v2q(int itime){
+	int i,j,k,l;
 	int nx,ny;
 	double **F;
-	double dFx, dFy;
-	F=pr.F;
-	nx=v1.Ng[0]; ny=v1.Ng[1];
+	double dFx,dFy,alph;
 
-	int k,l;
-	for(k=0;k<v1.Nin;k++){
-		l=v1.kint[k];
-		v1.l2ij(l,&i,&j);
-		dFx=(F[i][j]-F[i-1][j])/dx[0]*dt/rho;
-		v1.F[i][j]+=dFx;
+	F=v3.F;
+	nx=q1.Ng[0]; ny=q1.Ng[1];
+
+	for(k=0; k<q1.Nin; k++){
+		l=q1.kint[k];
+		q1.l2ij(l,&i,&j);
+		alph=amu*dt/dx[0];
+		//dFx=(F[i][j]-F[i-1][j])/dx[0]*dt/rho;
+		dFx=alph*(F[i][j]-F[i-1][j]);
+		q1.F[i][j]+=dFx;
 	};
 
-	for(k=0;k<v2.Nin;k++){
-		l=v2.kint[k];
-		v2.l2ij(l,&i,&j);
-		dFy=(F[i][j]-F[i][j-1])/dx[1]*dt/rho;
-		v2.F[i][j]+=dFy;
+	for(k=0; k<q2.Nin; k++){
+		l=q2.kint[k];
+		q2.l2ij(l,&i,&j);
+		alph=amu*dt/dx[1];
+		//dFy=(F[i][j]-F[i][j-1])/dx[1]*dt/rho;
+		dFy=alph*(F[i][j]-F[i][j-1]);
+		q2.F[i][j]+=dFy;
 	};
 
 	SOURCE src;
 
 	double bvl;
 	int sgn,sft,iwv;
-
 	for(int isrc=0;isrc<nsrc;isrc++){
-		//src=dm.srcs[isrc];
 		src=srcs[isrc];
 		iwv=src.iwv;
-		bvl=wvs[iwv].amp[itime];
+		//bvl=wvs[iwv].amp[itime];
+		bvl=wvs[iwv].val(itime*dt);
 		sft=1;
 		sgn=src.nml;
 		if(sgn ==-1) sft=0;
 
 		switch(src.type){
 		case 1:	// v1 source
-			for(k=0;k<src.ng;k++){
+			for(k=0; k<src.ng; k++){
 				i=src.isrc[k];
 				j=src.jsrc[k];
-				dFx=sgn*(bvl-F[i-sft][j])/dx[0]*dt/rho;
-				v1.F[i][j]+=dFx;
+				//dFx=sgn*(bvl-F[i-sft][j])/dx[0]*dt/rho;
+				//q1.F[i][j]+=dFx;
+				q1.F[i][j]=bvl*sgn;
 			}
 			break;
 		case 2: // v2 source
-			for(k=0;k<src.ng;k++){
+			for(k=0; k<src.ng; k++){
 				i=src.isrc[k];
 				j=src.jsrc[k];
-				dFy=sgn*(bvl-F[i][j-sft])/dx[1]*dt/rho;
-				v2.F[i][j]+=dFy;
+				//dFy=sgn*(bvl-F[i][j-sft])/dx[1]*dt/rho;
+				//q2.F[i][j]+=dFy;
+				q2.F[i][j]=bvl*sgn;
 			}
 			break;
 		};

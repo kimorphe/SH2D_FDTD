@@ -37,7 +37,7 @@ Wv1D::Wv1D(char *fname){
 	fft_stat=0;
 	Wv1D::load(fname);
 };
-void Wv1D::gen_wv(char fname[128]){
+void Wv1D::gen_wv(char *fname){
 	awv.gen(fname);
 	awv.disp();
 	Nt=awv.Nt;
@@ -48,6 +48,16 @@ void Wv1D::gen_wv(char fname[128]){
 	for(int i=0;i<Nt;i++) time[i]=dt*i;
 	t1=time[0];
 	t2=time[Nt-1];
+};
+double Wv1D::val(double tau){
+
+	if(tau  < t1) return(0.0);
+	if(tau >= t2) return(0.0);
+
+	int i1=int((tau-t1)/dt);
+	int i2=i1+1;
+	double xi=(tau-t1)/dt-i1;
+	return(amp[i1]*(1.-xi)+amp[i2]*xi);
 };
 void Wv1D::print_info(){
 	printf("------wave data parameters-------\n");
@@ -94,7 +104,8 @@ int Wv1D::load(char fname[128]){
 	t1=time[0];
 	t2=time[Nt-1];
 	dt=time[1]-time[0];
-}
+	return(0);
+};
 int Wv1D::FFT(int isgn){
 	int p=ceil(log2(Nt));
 	Np=pow(2,p);
@@ -507,10 +518,16 @@ InWv::InWv(int N){
 	
 };
 void InWv::gen(char *fname){
+//void InWv::gen(char fname[128]){
 	int i;
 	FILE *fp;
 	char ch[128];
 	fp=fopen(fname,"r");
+	if(fp==NULL){
+		printf("%s not found !!\n",fname);
+		printf(" ---> abort process\n");
+		exit(-1);
+	};
 	fgets(ch,128,fp);
 	fscanf(fp,"%d\n",&wvtyp);	
 
