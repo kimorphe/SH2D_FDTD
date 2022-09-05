@@ -51,7 +51,7 @@
 			FFT: original waveform class and fft program 
 		</ul>
 	</ul>
-<h2>開発記録:</h2>
+<h2>History:</h2>
 	<ul>
 		<li>
 		8/31/2022(Wed.)<br>
@@ -91,6 +91,11 @@
 		SOURCEクラスの拡張-->TRNSDCRクラス:T/R兼用（pulse echo mode）へ<br>
 		ARRAYクラスの追加(複数ソースの同期入射)
 		</li>
+		<li>
+		9/5/2022(Mon.)<br>
+		出力ステップの指定（時間範囲と出力ステップ数をtset.inpから指定）.
+		CNTRLクラス内の変数Noutと時間ステップが一致した場合にv3 fieldのsnapshotを書き出し
+		</li>
 	</ul>
 <h2>開発項目:</h2>
 	<ol>
@@ -109,8 +114,8 @@
 		<li><s>斜角入射</s>(9/4)</li>
 		<li><s>T/R兼用(pulse echo)のためのクラス</s>(9/4)</li>
 		<li><s>coordinated excitation: SOURCEインスタンスを管理するARRAYクラスの作成</s>(9.4)</li>
+		<li><s>出力時間ステップの指定機構</s>(9/5)</li>
 		<li>array送受の場合の出力directory切り替え</li>
-		<li>出力時間ステップの指定機構</li>
 		<li>B-scan dataの可視化python script</li>
 		<li>snap.pyの効率化、colorbar追加</li>
 		<li>定式化メモの作成</li>

@@ -94,17 +94,31 @@ void CNTRL::setup_domain(char *fname){
 
 };
 
+bool CNTRL::out_time(int it){
+	if(it==Nout){
+		printf("it/Nt=%d/%d (Nout=%d)\n",it,Nt,Nout);
+		Nout+=Ninc;
+		return(true);
+	}
+	return(false);
+};
 void CNTRL::time_setting(char *fname){
 	FILE *fp=fopen(fname,"r");
 	char cbff[128];	
 
 	fgets(cbff,128,fp);
-	//fscanf(fp,"%lf, %d\n",&dt, &Nt);
 	fscanf(fp,"%lf, %d\n",&Tf, &Nt);
 	dt=Tf/(Nt-1);
 	printf("dt=%lf, Nt=%d, Tf=%lf\n",dt,Nt,Tf);
-//	dm.CFL(dt);
 	CNTRL::CFL();
+
+	fgets(cbff,128,fp);
+	fscanf(fp,"%lf, %lf, %d\n",&tout_s, &tout_e, &Nout);
+	Ninc=(tout_e-tout_s)/((Nout-1)*dt);
+	if(Ninc<1) Ninc=1;
+	Nout=floor(tout_s/dt);
+	if(Nout==0) Nout+=Ninc;
+	printf("Ninc=%d, Nout=%d\n",Ninc, Nout);
 
 	fgets(cbff,128,fp);
 	fgets(cbff,128,fp);

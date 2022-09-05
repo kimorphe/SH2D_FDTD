@@ -126,6 +126,9 @@ class CNTRL{
 		double Ha[2], Hb[2];
 		int NHa[2], NHb[2];
 		double dt,Tf;
+		double tout_s,tout_e;
+		int Nout,Ninc;
+		bool out_time(int i);
 		DOMAIN dm;
 		FIELD v3,q1,q2; 
 		FIELD v3x,v3y;

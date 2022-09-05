@@ -31,8 +31,13 @@ int main(int argc, char *argv[]){
 		//ctr.record(it);
 		ctr.q2v(it);
 		ctr.capture(it);
+		/*
 		if((it+1)%10==0){
 			printf("it=%d,isum=%d\n",it,isum);
+		       	ctr.v3.fwrite(isum++);
+		};
+		*/
+		if(ctr.out_time(it)){
 		       	ctr.v3.fwrite(isum++);
 		};
 	};
