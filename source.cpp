@@ -53,8 +53,10 @@ void TRNSDCR::record(int jt, double **fld){
 	for(ig=0; ig<ng; ig++){
 		i=isrc[ig];
 		j=jsrc[ig];
-		if(type==1) i-=nml;
-		if(type==2) j-=nml;
+		if(nml==1){ 
+			if(type==1) i-=nml;
+			if(type==2) j-=nml;
+		};
 		bwv[ig][jt]=fld[i][j]; 
 	};
 };

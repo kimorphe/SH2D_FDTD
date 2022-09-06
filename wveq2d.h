@@ -7,6 +7,7 @@ class FIELD{
 	public:
 		int Ng[2];
 		int *Ndiv;
+		int NHa[2], NHb[2]; 
 		int ndat;
 		double **F;
 		void print_F();
@@ -20,6 +21,7 @@ class FIELD{
 		void l2ij(int l, int *ix, int *jy);
 		double  ofst[2];
 		void fwrite(int d_num, int num);
+		void fwrite_trim(int d_num, int num, int *NHa, int *NHb);
 		void set_IC(double xc, double yc, double sig, double f0);
 		void print_prms();
 		void gen_indx0(int **kcell);
@@ -81,7 +83,8 @@ class RECVR{
 		void record(int it, double **fld);
 		double *Xa, *dx;
 		void set_cod(double *Xa, double *dx);
-		void fwrite();
+		void fwrite(int n_meas);
+		void clear();
 	private:
 };
 class ARRAY{
@@ -159,6 +162,7 @@ class CNTRL{
 		void capture(int ii);
 		void clear();
 		void fwrite_ary();
+		void snapshot(int meas, int isum);
 	private:
 };
 double pwfun(

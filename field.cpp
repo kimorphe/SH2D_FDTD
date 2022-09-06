@@ -4,6 +4,47 @@
 #include"wveq2d.h"
 
 //--------------------------------------------------------------------------
+void FIELD::fwrite_trim(int d_num, int num, int *NHa, int *NHb){
+	char fname[128];
+	if(type==0) sprintf(fname,"T%d/v3_%d.out",d_num,num);
+	if(type==1) sprintf(fname,"T%d/q1_%d.out",d_num,num);
+	if(type==2) sprintf(fname,"T%d/q2_%d.out",d_num,num);
+	FILE *fp=fopen(fname,"w");
+	if(fp==NULL){
+		printf("Cant open %s",fname);
+		printf(" check if output directory exists\n");
+		exit(-1);
+	};
+	int i,j;
+
+	double xll[2], wdt[2];
+	int ngs[2];
+	for(i=0;i<2;i++){
+		xll[i]=Xa[i]+NHa[i]*dx[i];
+		wdt[i]=Wd[i]-(NHa[i]+NHb[i])*dx[i];
+		ngs[i]=Ng[i]-NHa[i]-NHb[i];
+	}
+
+	fprintf(fp,"# Xa[0:1]\n");
+	fprintf(fp,"%lf, %lf\n",xll[0],xll[1]);
+
+	fprintf(fp,"# Xb[0:1]\n");
+	fprintf(fp,"%lf, %lf\n",xll[0]+wdt[0],xll[1]+wdt[1]);
+
+	fprintf(fp,"# Ng[0:1]\n");
+	fprintf(fp,"%d, %d\n",ngs[0],ngs[1]);
+	fprintf(fp,"# field value\n");
+	for(i=NHa[0]; i<ngs[0]; i++){
+	for(j=NHa[1]; j<ngs[1]; j++){
+		fprintf(fp,"%lf\n",F[i][j]);
+	}
+	}
+	//printf("Xa=%lf, %lf\n",Xa[0],Xa[1]);
+	//jprintf("dx=%lf, %lf\n",dx[0],dx[1]);
+	//printf("NHa=%d, %d\n",NHa[0],NHa[1]);
+	//printf("NHb=%d, %d\n",NHb[0],NHb[1]);
+	fclose(fp);
+}
 void FIELD::fwrite(int d_num, int num){
 	char fname[128];
 	if(type==0) sprintf(fname,"T%d/v3_%d.out",d_num,num);

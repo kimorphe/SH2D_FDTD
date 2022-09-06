@@ -161,7 +161,7 @@ int CNTRL::src_setting(char *fname){
 	int nml;	// 1,-1 (normal vector, nx/ny)
 	int iwv;	// waveform No.
 	double xsrc,ysrc,ain;
-	int i,j,i1,i2,j1,j2,ng;
+	int i0,i,j,i1,i2,j1,j2,ng;
 	int isrc,jsrc,isum;
 
 	fgets(cbff,128,fp);
@@ -184,8 +184,16 @@ int CNTRL::src_setting(char *fname){
 		switch(ityp){
 		case 1:	// v1-source
 			ng=ceil(wdt/dx[1]);
-			j1=int((xy-w2-Xa[1])/dx[1]);
 			if(ng==0) ng=1;
+			if(ng%2==0){
+				i0=int((xy-Xa[1])/dx[1]+0.5);
+				xy=Xa[1]+i0*dx[1];
+			}else{
+				i0=int((xy-Xa[1])/dx[1]);
+				xy=Xa[1]+(i0+0.5)*dx[1];
+			};
+			printf("xy=%lf\n",xy);
+			j1=int((xy-w2-Xa[1])/dx[1]);
 			srcs[k].mem_alloc(ng);
 			for(j=0; j<ng; j++){
 				jsrc=j+j1;
@@ -201,6 +209,14 @@ int CNTRL::src_setting(char *fname){
 			break;
 		case 2: // v2-source
 			ng=ceil(wdt/dx[0]);
+			if(ng%2==0){
+				i0=int((xy-Xa[0])/dx[0]+0.5);
+				xy=Xa[0]+i0*dx[0];
+			}else{
+				i0=int((xy-Xa[0])/dx[0]);
+				xy=Xa[0]+(i0+0.5)*dx[0];
+			};
+			printf("xy=%lf\n",xy);
 			i1=int((xy-w2-Xa[0])/dx[0]);
 			if(ng==0) ng=1;
 			srcs[k].mem_alloc(ng);
@@ -263,16 +279,16 @@ int CNTRL::rec_setting(char *fname){
 	FILE *fp=fopen(fname,"r");
 	char cbff[128];	
 	int ityp,nml,ng;
-	int i,j;
+	int i,j,i0;
 	int i1,i2,j1,j2,irec,jrec,isum;
 	double xrec,yrec;
-	double w2,wdt,xyrec;
+	double w2,wdt,xy;
 	fgets(cbff,128,fp);
 	fscanf(fp,"%d\n",&nrec);
 	fgets(cbff,128,fp);
 	recs=(RECVR *)malloc(sizeof(RECVR)*nrec);
 	for(int ir=0; ir<nrec; ir++){
-		fscanf(fp,"%d, %lf, %lf, %d\n",&ityp, &xyrec, &wdt, &nml);
+		fscanf(fp,"%d, %lf, %lf, %d\n",&ityp, &xy, &wdt, &nml);
 		recs[ir].type=ityp;
 		recs[ir].nml=nml;
 		recs[ir].wd=wdt;
@@ -283,8 +299,16 @@ int CNTRL::rec_setting(char *fname){
 		switch(ityp){
 		case 1:	// v1-receiver
 			ng=ceil(wdt/dx[1]);
-			j1=int((xyrec-w2-Xa[1])/dx[1]);
 			if(ng==0) ng=1;
+			if(ng%2==0){
+				i0=int((xy-Xa[1])/dx[1]+0.5);
+				xy=Xa[1]+i0*dx[1];
+			}else{
+				i0=int((xy-Xa[1])/dx[1]);
+				xy=Xa[1]+(i0+0.5)*dx[1];
+			};
+
+			j1=int((xy-w2-Xa[1])/dx[1]);
 			recs[ir].mem_alloc(ng);
 			for(j=0; j<ng; j++){
 				jrec=j+j1;
@@ -292,6 +316,7 @@ int CNTRL::rec_setting(char *fname){
 				if(jrec>=Ndiv[1]) break;
 				yrec=Xa[1]+(jrec+0.5)*dx[1];
 				irec=dm.find_q1bnd(nml,yrec);
+				if(nml==1) irec--;
 				recs[ir].irec[isum]=irec;
 				recs[ir].jrec[isum]=jrec;
 				isum++;
@@ -300,7 +325,15 @@ int CNTRL::rec_setting(char *fname){
 		case 2: // v2-receiver
 			ng=ceil(wdt/dx[1]);
 			if(ng==0) ng=1;
-			i1=int((xyrec-w2-Xa[0])/dx[0]);
+			if(ng%2==0){
+				i0=int((xy-Xa[0])/dx[0]+0.5);
+				xy=Xa[0]+i0*dx[0];
+			}else{
+				i0=int((xy-Xa[0])/dx[0]);
+				xy=Xa[0]+(i0+0.5)*dx[0];
+			};
+
+			i1=int((xy-w2-Xa[0])/dx[0]);
 			recs[ir].mem_alloc(ng);
 			for(i=0; i<ng; i++){
 				irec=i+i1;
@@ -308,6 +341,7 @@ int CNTRL::rec_setting(char *fname){
 				if(irec>=Ndiv[0]) break;
 				xrec=Xa[0]+(0.5+irec)*dx[0];
 				jrec=dm.find_q2bnd(nml,xrec);
+				if(nml==1) jrec--;
 				recs[ir].irec[isum]=irec;
 				recs[ir].jrec[isum]=jrec;
 				isum++;
@@ -459,6 +493,7 @@ void CNTRL::clear(){
 	v3x.clear();
 	v3y.clear();
 	for(int i=0;i<nsrc;i++) srcs[i].clear();
+	for(int i=0;i<nrec;i++) recs[i].clear();
 	iout=iout0;
 };
 void CNTRL::fwrite_ary(){
@@ -476,4 +511,9 @@ void CNTRL::fwrite_ary(){
 		}
 	};
 	fclose(fp);
+
+	for(j=0; j<nrec; j++) recs[j].fwrite(round);
+};
+void CNTRL::snapshot(int n_meas, int isum){
+	v3.fwrite_trim(n_meas,isum,NHa,NHb);
 };

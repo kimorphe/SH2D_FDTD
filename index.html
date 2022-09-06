@@ -101,6 +101,13 @@
 		array波形の表示スクリプトbscan.py作成<br>
 		スナップショットの保存先変更subdirectory ./T*/以下へ(予めdirectory作成が必要な点が不便．どうにかしたい <br>
 		</li>
+		<li>
+		9/6/2022(Tue.)<br>
+		source位置指定方法(index)計算の修正: グリッド数の奇偶によって,中心座標をsnapするgridを選択</br>
+		PML領域をtrimmingした出力CNTRL::snapshot(meas,isum)--> FIELD::fwrite_trim(meas,isum, *NHa, *NHa) </br>
+		RECVRクラスの修正:v3-gridでの出力，bスキャン波形をT*/以下に保存--> 合成波形の出力に修正すること</br>
+		波形記録を行うindexの計算のミスを修正:i-=nml とするのはnml=1の場合のみ
+		</li>
 	</ul>
 <h2>開発項目:</h2>
 	<ol>
@@ -121,8 +128,10 @@
 		<li><s>出力時間ステップの指定機構</s>(9/5)</li>
 		<li><s>array送受の場合の出力directory切り替え</s>(9/5)</li>
 		<li><s>B-scan dataの可視化python script</s>(9/5)</li>
-		<li>source 位置の微調整(指定した座標からのズレ原因の把握と修正)</li>
-		<li>出力領域の調整:PML領域のtrimming</li>
+		<li><s>source 位置の微調整(指定した座標からのズレ原因の把握と修正)</s>9/6</li>
+		<li><s>出力領域の調整:PML領域のtrimming</s>(9/6)</li>
+		<li>RECVRの遅延合成機能</li>
+		<li>demo input dataの作成(TOFD, Beam steering, FMC)とdebug</li>
 		<li>snap.pyの効率化、colorbar追加</li>
 		<li>定式化メモの作成</li>
 		<li>境界グリッドの重複した更新の防止</li>

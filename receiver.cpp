@@ -40,11 +40,15 @@ void RECVR::set_cod(double *xa, double *dh){
 	Xa=xa; 
 	dx=dh;
 };
-void RECVR::fwrite(){
+void RECVR::fwrite(int n_meas){
 	int i,j;
 	char fname[128];
-	sprintf(fname,"bwv%d.out",ID);
+	sprintf(fname,"T%d/bwv%d.out",n_meas,ID);
 	FILE *fp=fopen(fname,"w");
+	if(fp==NULL){
+		printf("Error Canrot open %s\n",fname);
+		exit(-1);
+	};
 	fprintf(fp,"# Nt, dt\n");
 	fprintf(fp,"%d, %lf\n",Nt,dt);
 	double x,y;
@@ -61,4 +65,12 @@ void RECVR::fwrite(){
 	};
 	};
 	fclose(fp);
+};
+void RECVR::clear(){
+	int i,j;
+	for(i=0;i<ng;i++){
+	for(j=0;j<Nt;j++){
+		bwv[i][j]=0.0;
+	}
+	}
 };

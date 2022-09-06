@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
 	ctr.time_setting(ftset);
 	ctr.src_setting(fsrce);
 	ctr.wvfm_setting(finwv);
-	//ctr.rec_setting(frecs);
+	ctr.rec_setting(frecs);
 	ctr.array_setting(farry);
 	
 	int it,isum,m;
@@ -25,18 +25,16 @@ int main(int argc, char *argv[]){
 	for(m=0;m<ctr.ary.nmeas;m++){
 
 	isum=0;
-	ctr.v3.fwrite(m,isum++);
+	ctr.snapshot(m,isum++);
 	for(it=0; it<ctr.Nt; it++){
 		ctr.v2q(it); 
-		//ctr.record(it);
 		ctr.q2v(it);
+		ctr.record(it);
 		ctr.capture(it);
-		if(ctr.out_time(it)) ctr.v3.fwrite(m,isum++);
+		if(ctr.out_time(it)) ctr.snapshot(m,isum++);
 	};
 	//for(int i=0; i<ctr.nrec; i++) ctr.recs[i].fwrite();
-	//for(int i=0; i<ctr.nsrc; i++) ctr.srcs[i].fwrite();
 	ctr.fwrite_ary();
-
 	ctr.round++;
 	ctr.clear();
 	}
