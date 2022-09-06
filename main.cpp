@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
 
 	ctr.setup_domain(fgeom);
 	ctr.time_setting(ftset);
-		ctr.src_setting(fsrce);
+	ctr.src_setting(fsrce);
 	ctr.wvfm_setting(finwv);
 	//ctr.rec_setting(frecs);
 	ctr.array_setting(farry);
@@ -25,24 +25,17 @@ int main(int argc, char *argv[]){
 	for(m=0;m<ctr.ary.nmeas;m++){
 
 	isum=0;
-	ctr.v3.fwrite(isum++);
+	ctr.v3.fwrite(m,isum++);
 	for(it=0; it<ctr.Nt; it++){
 		ctr.v2q(it); 
 		//ctr.record(it);
 		ctr.q2v(it);
 		ctr.capture(it);
-		/*
-		if((it+1)%10==0){
-			printf("it=%d,isum=%d\n",it,isum);
-		       	ctr.v3.fwrite(isum++);
-		};
-		*/
-		if(ctr.out_time(it)){
-		       	ctr.v3.fwrite(isum++);
-		};
+		if(ctr.out_time(it)) ctr.v3.fwrite(m,isum++);
 	};
 	//for(int i=0; i<ctr.nrec; i++) ctr.recs[i].fwrite();
-	for(int i=0; i<ctr.nsrc; i++) ctr.srcs[i].fwrite();
+	//for(int i=0; i<ctr.nsrc; i++) ctr.srcs[i].fwrite();
+	ctr.fwrite_ary();
 
 	ctr.round++;
 	ctr.clear();

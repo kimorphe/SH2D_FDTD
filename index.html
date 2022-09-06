@@ -35,12 +35,14 @@
 		</ul>
 	<li>Output Files:</li>
 		<ul>
-		<li> pr0.out</li>
+		<li> T{0-}/v3_*.out: v3-field (snapshot)</li>
+		<li> ary*.out: array-measured temporal waveforms</li>
 		</ul>
 	<li>Python Codes: </li>
 		<ul>
-			<li><a href="./kcell.py">kcell.py</a> </li>
-			<li><a href="./snap.py">snap.py</a>--> v3_***.png </li>
+			<li><a href="./kcell.py">kcell.py</a> : pixel geometryの表示</li>
+			<li><a href="./snap.py">snap.py</a> <--v3_*.out--> v3_***.png </li>
+			<li><a href="./bscan.py">bscan.py</a>: <-- ary*.out </li>
 		</ul>
 	<li>Auxillary programs:</li>
 		<ul>
@@ -94,13 +96,15 @@
 		<li>
 		9/5/2022(Mon.)<br>
 		出力ステップの指定（時間範囲と出力ステップ数をtset.inpから指定）.
-		CNTRLクラス内の変数Noutと時間ステップが一致した場合にv3 fieldのsnapshotを書き出し
+		CNTRLクラス内の変数Noutと時間ステップが一致した場合にv3 fieldのsnapshotを書き出し<br>
+		各array elementからの平均波形を出力 --> ary*.out (* means *th measurement)<br>
+		array波形の表示スクリプトbscan.py作成<br>
+		スナップショットの保存先変更subdirectory ./T*/以下へ(予めdirectory作成が必要な点が不便．どうにかしたい <br>
 		</li>
 	</ul>
 <h2>開発項目:</h2>
 	<ol>
-		<li><s>複数ソースの同時励起 </s>(9/1)<br>
-		</li>
+		<li><s>複数ソースの同時励起 </s>(9/1)</li>
 		<li><s>複数入射波形の利用</s>(9/1) -->  随伴場計算に必要
 		<li><s>観測点クラスの導入</s>(9/1)</li>
 		<li><s>RECVRクラスの仕上げ(grid数のカウント, 座標設定)</s>(9/2)</li>
@@ -113,10 +117,12 @@
 		<li><s>PML分の計算領域拡張</s>(9/3)</li>
 		<li><s>斜角入射</s>(9/4)</li>
 		<li><s>T/R兼用(pulse echo)のためのクラス</s>(9/4)</li>
-		<li><s>coordinated excitation: SOURCEインスタンスを管理するARRAYクラスの作成</s>(9.4)</li>
+		<li><s>coordinated excitation: SOURCEインスタンスを管理するARRAYクラスの作成</s>(9/4)</li>
 		<li><s>出力時間ステップの指定機構</s>(9/5)</li>
-		<li>array送受の場合の出力directory切り替え</li>
-		<li>B-scan dataの可視化python script</li>
+		<li><s>array送受の場合の出力directory切り替え</s>(9/5)</li>
+		<li><s>B-scan dataの可視化python script</s>(9/5)</li>
+		<li>source 位置の微調整(指定した座標からのズレ原因の把握と修正)</li>
+		<li>出力領域の調整:PML領域のtrimming</li>
 		<li>snap.pyの効率化、colorbar追加</li>
 		<li>定式化メモの作成</li>
 		<li>境界グリッドの重複した更新の防止</li>

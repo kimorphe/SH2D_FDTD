@@ -19,7 +19,7 @@ class FIELD{
 		int ij2l(int i, int j);
 		void l2ij(int l, int *ix, int *jy);
 		double  ofst[2];
-		void fwrite(int num);
+		void fwrite(int d_num, int num);
 		void set_IC(double xc, double yc, double sig, double f0);
 		void print_prms();
 		void gen_indx0(int **kcell);
@@ -28,18 +28,6 @@ class FIELD{
 		int *kbnd, *kint;
 		int Nin,Nbnd,Nex;
 		void clear();
-	private:
-};
-class ARRAY{
-	public:
-		int nele;	// number of array elements
-		int nmeas;	
-		int *actv;	// activation
-		double *a0;	// apodization
-		double *tdly;	// time delay
-		void init(int ne, int nm);
-		int i0;
-		void print();
 	private:
 };
 class SOURCE{
@@ -52,12 +40,14 @@ class SOURCE{
 		int type;	// 1:v1, 2:v2
 		int nml;	// normal vector (nx or ny)
 		void set(double x, double y, double w);
-		void print(double *Xa, double *dx);
+		void print();
 		int iwv;	// waveform number 
 		double Ctd;	// delay time gradient
 		bool Ton; // activated 
 		double *dx, *Xa;
 		double dt;
+		double x0,y0;
+		void set_center();
 		void set_inc_ang(double th, double ct);
 	private:
 };
@@ -70,6 +60,8 @@ class TRNSDCR: public SOURCE{
 		double **bwv;
 		void record(int it, double **fld);
 		void fwrite();
+		double mean_amp(int i);
+		void clear();
 	private:
 };
 class RECVR{
@@ -89,6 +81,20 @@ class RECVR{
 		void record(int it, double **fld);
 		double *Xa, *dx;
 		void set_cod(double *Xa, double *dx);
+		void fwrite();
+	private:
+};
+class ARRAY{
+	public:
+		int nele;	// number of array elements
+		int nmeas;	
+		int *actv;	// activation
+		double *a0;	// apodization
+		double *tdly;	// time delay
+		void init(int ne, int nm);
+		int i0;
+		void print();
+//		TRNSDCR *trs;
 		void fwrite();
 	private:
 };
@@ -127,7 +133,7 @@ class CNTRL{
 		int NHa[2], NHb[2];
 		double dt,Tf;
 		double tout_s,tout_e;
-		int Nout,Ninc;
+		int Nout,Ninc,iout,iout0;
 		bool out_time(int i);
 		DOMAIN dm;
 		FIELD v3,q1,q2; 
@@ -152,6 +158,7 @@ class CNTRL{
 		void record(int ii);
 		void capture(int ii);
 		void clear();
+		void fwrite_ary();
 	private:
 };
 double pwfun(

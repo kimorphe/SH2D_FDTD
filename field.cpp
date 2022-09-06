@@ -4,12 +4,17 @@
 #include"wveq2d.h"
 
 //--------------------------------------------------------------------------
-void FIELD::fwrite(int num){
+void FIELD::fwrite(int d_num, int num){
 	char fname[128];
-	if(type==0) sprintf(fname,"v3_%d.out",num);
-	if(type==1) sprintf(fname,"q1_%d.out",num);
-	if(type==2) sprintf(fname,"q2_%d.out",num);
+	if(type==0) sprintf(fname,"T%d/v3_%d.out",d_num,num);
+	if(type==1) sprintf(fname,"T%d/q1_%d.out",d_num,num);
+	if(type==2) sprintf(fname,"T%d/q2_%d.out",d_num,num);
 	FILE *fp=fopen(fname,"w");
+	if(fp==NULL){
+		printf("Cant open %s",fname);
+		printf(" check if output directory exists\n");
+		exit(-1);
+	};
 	int i,j;
 
 	fprintf(fp,"# Xa[0:1]\n");

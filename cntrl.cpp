@@ -95,9 +95,9 @@ void CNTRL::setup_domain(char *fname){
 };
 
 bool CNTRL::out_time(int it){
-	if(it==Nout){
-		printf("it/Nt=%d/%d (Nout=%d)\n",it,Nt,Nout);
-		Nout+=Ninc;
+	if(it==iout){
+		printf("it/Nt=%d/%d (Nout=%d)\n",it,Nt,iout);
+		iout+=Ninc;
 		return(true);
 	}
 	return(false);
@@ -116,9 +116,10 @@ void CNTRL::time_setting(char *fname){
 	fscanf(fp,"%lf, %lf, %d\n",&tout_s, &tout_e, &Nout);
 	Ninc=(tout_e-tout_s)/((Nout-1)*dt);
 	if(Ninc<1) Ninc=1;
-	Nout=floor(tout_s/dt);
-	if(Nout==0) Nout+=Ninc;
-	printf("Ninc=%d, Nout=%d\n",Ninc, Nout);
+	iout=floor(tout_s/dt);
+	if(iout==0) iout+=Ninc;
+	iout0=iout;
+	printf("Ninc=%d, iout=%d\n",Ninc, iout);
 
 	fgets(cbff,128,fp);
 	fgets(cbff,128,fp);
@@ -217,22 +218,12 @@ int CNTRL::src_setting(char *fname){
 			break;
 		};
 		ng=isum;
-		srcs[k].print(Xa, dx);
+		srcs[k].print();
+		srcs[k].set_center();
 		srcs[k].init_bwv(Nt,dt);
 	}
 	nwv++;
 	printf("nwv=%d\n",nwv);
-/*
-	ary.init(nsrc);
-	fgets(cbff,128,fp);
-	int nmeas;
-	fscanf(fp,"%d\n",&nmeas);
-	fgets(cbff,128,fp);
-	for(i=0;i<nsrc;i++){
-		fscanf(fp,"%d, %lf, %lf\n",ary.actv+i, ary.a0+i, ary.tdly+i);
-	};
-	ary.print();
-*/
 	fclose(fp);
 	return(nwv);
 };
@@ -467,4 +458,22 @@ void CNTRL::clear(){
 	q2.clear();
 	v3x.clear();
 	v3y.clear();
+	for(int i=0;i<nsrc;i++) srcs[i].clear();
+	iout=iout0;
+};
+void CNTRL::fwrite_ary(){
+	int j,k;
+	char fname[128];
+	FILE *fp;
+	sprintf(fname,"ary%d.out",round);
+	fp=fopen(fname,"w");
+	fprintf(fp,"# nele, Nt\n");
+	fprintf(fp,"%d, %d\n",nsrc,Nt);
+	for(j=0;j<nsrc;j++){
+		fprintf(fp,"# e=%d, %lf, %lf\n",j,srcs[j].x0,srcs[j].y0);
+		for(k=0;k<Nt;k++){
+			fprintf(fp,"%lf, %lf\n",dt*k, srcs[j].mean_amp(k));
+		}
+	};
+	fclose(fp);
 };

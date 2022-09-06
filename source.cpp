@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include"wveq2d.h"
 
-void SOURCE::print(double *Xa, double *dx){
+void SOURCE::print(){
 	printf("----------- Source Parameters -----------\n");
 	printf("ng=%d\n",ng);
 	double x,y;
@@ -18,6 +18,10 @@ void SOURCE::print(double *Xa, double *dx){
 		y=Xa[1]+(jsrc[i]+yofst)*dx[1];
 		printf("(x,y)=(%lf, %lf)\n",x,y);
 	};
+};
+void SOURCE::set_center(){
+	x0=dx[0]*(isrc[0]+isrc[ng-1]+1.)*0.5+Xa[0];
+	y0=dx[1]*(jsrc[0]+jsrc[ng-1]+1.)*0.5+Xa[1];
 };
 void SOURCE::set_inc_ang(double th, double ct){
 	double PI=4.0*atan(1.0);
@@ -72,6 +76,21 @@ void TRNSDCR::fwrite(){
 	};
 	fclose(fp);
 };
+double TRNSDCR::mean_amp(int it){
+	if(it<0) return(0.0);
+	if(it>=Nt) return(0.0);
+	double amp=0.0;
+	for(int j=0;j<ng;j++) amp+=bwv[j][it];
+	return(amp/ng);
+};
+void TRNSDCR::clear(){
+	int i,j;
+	for(i=0;i<ng;i++){
+	for(j=0;j<Nt;j++){
+		bwv[i][j]=0.0;
+	}
+	}	
+};
 void ARRAY::init(int nn, int nm){
 	nele=nn;
 	nmeas=nm;
@@ -96,3 +115,21 @@ void ARRAY::print(){
 	printf("\n");
 	}
 };
+/*
+void ARRAY::fwrite(){
+	char fname[128];
+	int i,j,k;
+	FILE *fp;
+	int Nt=trs[0].Nt;
+	double dt=trs[0].dt;
+	sprintf(fname,"ary%d.out\n",round);
+	fp=fopen(fname,"w");
+	for(j=0;j<nele;j++){
+		fprintf(fp,"# e=%d\n",j);
+		for(k=0;k<Nt;k++){
+			fprintf(fp,"%lf, %lf\n",dt*k,trs[j].mean_amp(k));
+		}
+	};
+	fclose(fp);
+};
+*/
