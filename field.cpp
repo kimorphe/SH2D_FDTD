@@ -11,8 +11,8 @@ void FIELD::fwrite_trim(int d_num, int num, int *NHa, int *NHb){
 	if(type==2) sprintf(fname,"T%d/q2_%d.out",d_num,num);
 	FILE *fp=fopen(fname,"w");
 	if(fp==NULL){
-		printf("Cant open %s",fname);
-		printf(" check if output directory exists\n");
+		printf("Can't open %s\n",fname);
+		printf(" first create output directory T* of necessary numbers\n");
 		exit(-1);
 	};
 	int i,j;

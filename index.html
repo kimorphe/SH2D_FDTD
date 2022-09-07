@@ -43,6 +43,7 @@
 			<li><a href="./kcell.py">kcell.py</a> : pixel geometryの表示</li>
 			<li><a href="./snap.py">snap.py</a> <--v3_*.out--> v3_***.png </li>
 			<li><a href="./bscan.py">bscan.py</a>: <-- ary*.out </li>
+			<li><a href="./data_dir.py">data_dir.py</a>: --> T* </li>
 		</ul>
 	<li>Auxillary programs:</li>
 		<ul>
@@ -108,6 +109,11 @@
 		RECVRクラスの修正:v3-gridでの出力，bスキャン波形をT*/以下に保存--> 合成波形の出力に修正すること</br>
 		波形記録を行うindexの計算のミスを修正:i-=nml とするのはnml=1の場合のみ
 		</li>
+		<li>
+		9/7/2022(Wed.)<br>
+		RECVR出力時の遅延波形合成<br>
+		directory作成スクリプト(data_dir.py)の追加<br>
+		</li>
 	</ul>
 <h2>開発項目:</h2>
 	<ol>
@@ -130,7 +136,7 @@
 		<li><s>B-scan dataの可視化python script</s>(9/5)</li>
 		<li><s>source 位置の微調整(指定した座標からのズレ原因の把握と修正)</s>9/6</li>
 		<li><s>出力領域の調整:PML領域のtrimming</s>(9/6)</li>
-		<li>RECVRの遅延合成機能</li>
+		<li><s>RECVRの遅延合成機能</s>(9/7)</li>
 		<li>demo input dataの作成(TOFD, Beam steering, FMC)とdebug</li>
 		<li>snap.pyの効率化、colorbar追加</li>
 		<li>定式化メモの作成</li>

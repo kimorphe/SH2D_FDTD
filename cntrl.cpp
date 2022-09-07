@@ -282,18 +282,19 @@ int CNTRL::rec_setting(char *fname){
 	int i,j,i0;
 	int i1,i2,j1,j2,irec,jrec,isum;
 	double xrec,yrec;
-	double w2,wdt,xy;
+	double w2,wdt,xy,thr;
 	fgets(cbff,128,fp);
 	fscanf(fp,"%d\n",&nrec);
 	fgets(cbff,128,fp);
 	recs=(RECVR *)malloc(sizeof(RECVR)*nrec);
 	for(int ir=0; ir<nrec; ir++){
-		fscanf(fp,"%d, %lf, %lf, %d\n",&ityp, &xy, &wdt, &nml);
+		fscanf(fp,"%d, %lf, %lf, %d, %lf\n",&ityp, &xy, &wdt, &nml, &thr);
 		recs[ir].type=ityp;
 		recs[ir].nml=nml;
 		recs[ir].wd=wdt;
 		recs[ir].ID=ir;
 		recs[ir].set_cod(Xa,dx);
+		recs[ir].set_inc_ang(thr,ct);
 		w2=0.5*wdt;
 		isum=0;
 		switch(ityp){
@@ -500,6 +501,8 @@ void CNTRL::fwrite_ary(){
 	int j,k;
 	char fname[128];
 	FILE *fp;
+
+	//	ARRAY WAVEFORMS 
 	sprintf(fname,"ary%d.out",round);
 	fp=fopen(fname,"w");
 	fprintf(fp,"# nele, Nt\n");
@@ -511,7 +514,7 @@ void CNTRL::fwrite_ary(){
 		}
 	};
 	fclose(fp);
-
+	// 	RECVR class output
 	for(j=0; j<nrec; j++) recs[j].fwrite(round);
 };
 void CNTRL::snapshot(int n_meas, int isum){

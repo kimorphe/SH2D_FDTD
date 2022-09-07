@@ -74,6 +74,7 @@ class RECVR{
 		int *irec, *jrec;
 		int type;	// 1:v1, 2:v2
 		int nml;
+		double Ctd;	// delay time gradient
 		void print();
 		double **bwv;
 		void mem_alloc(int n);
@@ -83,7 +84,11 @@ class RECVR{
 		void record(int it, double **fld);
 		double *Xa, *dx;
 		void set_cod(double *Xa, double *dx);
+		void set_inc_ang(double th, double ct);
+		void fwrite_dump(int n_meas);
 		void fwrite(int n_meas);
+		double val(int ig, double tt);
+		double amp_synth(int it);
 		void clear();
 	private:
 };

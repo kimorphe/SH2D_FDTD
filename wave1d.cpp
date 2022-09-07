@@ -51,10 +51,11 @@ void Wv1D::gen_wv(char *fname){
 };
 double Wv1D::val(double tau){
 
-	if(tau  < t1) return(0.0);
-	if(tau >= t2) return(0.0);
+	if(tau < t1) return(0.0);
+	if(tau > t2) return(0.0);
 
 	int i1=int((tau-t1)/dt);
+	if(i1==Nt-1) return(amp[i1]);
 	int i2=i1+1;
 	double xi=(tau-t1)/dt-i1;
 	return(amp[i1]*(1.-xi)+amp[i2]*xi);
