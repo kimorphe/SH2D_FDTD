@@ -92,7 +92,7 @@ double RECVR::amp_synth(int it){
 	double amp=0.0;
 	double tt=it*dt;
 	for(ig=0; ig<ng; ig++){
-		amp+=val(ig,tt+Ctd*ig);
+		amp+=val(ig,tt-Ctd*ig);
 	};
 	return(amp);
 };

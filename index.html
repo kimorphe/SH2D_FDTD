@@ -27,7 +27,10 @@
 		</ul>
 	<li>Input Files:</li>
 		<ul>
-		<li> <a href="./geom.inp">geom.inp</a> </li>
+			<li> <a href="./geom.inp">geom.inp</a>  
+				<a href="./HTML/geom.html">(説明)</a>
+				<a href="./HTML/geom.pdf">(PDF)</a>
+			</li>
 		<li> <a href="./tset.inp">tset.inp</a> </li>
 		<li> <a href="./inwv0.dat">inwv0.dat</a> </li>
 		<li> <a href="./src.inp">src.inp</a> </li>
@@ -114,6 +117,15 @@
 		RECVR出力時の遅延波形合成<br>
 		directory作成スクリプト(data_dir.py)の追加<br>
 		</li>
+		<li>
+		9/8(Thr.)<br>
+		TRNSDCRクラスでの遅延波形合成<br>
+		TRNSDCR::SOURCEクラス内の変数dtを削<br>
+		RECVRクラスの使用解除<br>
+		メモ：
+		<strong>soffice --headless --convert-to pdf file_name.txt</strong>
+			(libreofficeを使ったPDFファイルへの変換)
+		</li>
 	</ul>
 <h2>開発項目:</h2>
 	<ol>
@@ -137,6 +149,7 @@
 		<li><s>source 位置の微調整(指定した座標からのズレ原因の把握と修正)</s>9/6</li>
 		<li><s>出力領域の調整:PML領域のtrimming</s>(9/6)</li>
 		<li><s>RECVRの遅延合成機能</s>(9/7)</li>
+		<li><s>TRNSDCRクラス内での遅延合成</s>(9/8)</li>
 		<li>demo input dataの作成(TOFD, Beam steering, FMC)とdebug</li>
 		<li>snap.pyの効率化、colorbar追加</li>
 		<li>定式化メモの作成</li>
@@ -148,7 +161,12 @@
 <h2>References:</h2>
 	<ul>
 		<li>
-		<a href="http://www.ic.daito.ac.jp/~mizutani/html/mathexpress.html" target="blank">HTMLでの数式表示(Latexを使うための方法)</a>
+			<a href="http://www.ic.daito.ac.jp/~mizutani/html/mathexpress.html" 
+			target="blank">HTMLでの数式表示(Latexを使うための方法)</a>
+		</li>
+		<li>
+			<a href="https://www.sukerou.com/2018/07/libreoffice.html" target="blank">
+			Libreofficeをコマンドラインから使用する方法</a>
 		</li>
 	</ul>
 </body>

@@ -47,7 +47,7 @@ class SOURCE{
 		double Ctd;	// delay time gradient
 		bool Ton; // activated 
 		double *dx, *Xa;
-		double dt;
+		//double dt;
 		double x0,y0;
 		void set_center();
 		void set_inc_ang(double th, double ct);
@@ -60,6 +60,8 @@ class TRNSDCR: public SOURCE{
 		double dt;
 		void init_bwv(int n, double dtau);
 		double **bwv;
+		double val(int ig, double tt);
+		double amp_synth(int it);
 		void record(int it, double **fld);
 		void fwrite();
 		double mean_amp(int i);

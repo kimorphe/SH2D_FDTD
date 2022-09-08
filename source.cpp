@@ -48,6 +48,23 @@ void TRNSDCR::init_bwv(int nn, double dtau){
 	for(int i=0; i<Nt*ng; i++) p[i]=0.0;
 	for(i=0;i<ng;i++) bwv[i]=p+i*Nt;
 };
+double TRNSDCR::val(int ig, double tt){
+	if(tt<0.0) return(0.0);
+	int it=int(tt/dt);
+	if(it>Nt-1) return(0.0);
+	if(it==Nt-1) return(bwv[ig][it]);
+	double xi=tt/dt-it;
+	return((1.-xi)*bwv[ig][it]+xi*bwv[ig][it+1]);
+};
+double TRNSDCR::amp_synth(int it){
+	int ig;
+	double amp=0.0,tt;
+	for(ig=0;ig<ng;ig++){
+		tt=it*dt-ig*Ctd;
+		amp+=val(ig,tt);
+	};
+	return(amp/ng);
+};
 void TRNSDCR::record(int jt, double **fld){
 	int ig,i,j;
 	for(ig=0; ig<ng; ig++){

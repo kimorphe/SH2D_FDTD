@@ -10,26 +10,27 @@ int main(int argc, char *argv[]){
 	char ftset[128]="tset.inp";
 	char finwv[128]="inwv0.dat";
 	char fsrce[128]="src.inp";
-	char frecs[128]="recs.inp";
+//	char frecs[128]="recs.inp";
 	char farry[128]="array.inp";
 
 	ctr.setup_domain(fgeom);
 	ctr.time_setting(ftset);
 	ctr.src_setting(fsrce);
 	ctr.wvfm_setting(finwv);
-	ctr.rec_setting(frecs);
+//	ctr.rec_setting(frecs);
 	ctr.array_setting(farry);
 	
 	int it,isum,m;
 	
 	for(m=0;m<ctr.ary.nmeas;m++){
+		printf("m=%d\n",m);
 
 	isum=0;
 	ctr.snapshot(m,isum++);
 	for(it=0; it<ctr.Nt; it++){
 		ctr.v2q(it); 
 		ctr.q2v(it);
-		ctr.record(it);
+//		ctr.record(it);
 		ctr.capture(it);
 		if(ctr.out_time(it)) ctr.snapshot(m,isum++);
 	};

@@ -441,7 +441,8 @@ void CNTRL::v2q(int itime){
 		q2.F[i][j]+=dFy;
 	};
 
-	SOURCE src;
+	//SOURCE src;
+	TRNSDCR src;
 
 	double bvl,tdly,tdly0,a0;
 	int sgn,sft,iwv,i0;
@@ -510,12 +511,13 @@ void CNTRL::fwrite_ary(){
 	for(j=0;j<nsrc;j++){
 		fprintf(fp,"# e=%d, %lf, %lf\n",j,srcs[j].x0,srcs[j].y0);
 		for(k=0;k<Nt;k++){
-			fprintf(fp,"%lf, %lf\n",dt*k, srcs[j].mean_amp(k));
+//			fprintf(fp,"%lf, %lf\n",dt*k, srcs[j].mean_amp(k));
+			fprintf(fp,"%lf, %lf\n",dt*k, srcs[j].amp_synth(k));
 		}
 	};
 	fclose(fp);
 	// 	RECVR class output
-	for(j=0; j<nrec; j++) recs[j].fwrite(round);
+	//for(j=0; j<nrec; j++) recs[j].fwrite(round);
 };
 void CNTRL::snapshot(int n_meas, int isum){
 	v3.fwrite_trim(n_meas,isum,NHa,NHb);
