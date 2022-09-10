@@ -1,0 +1,8 @@
+# Trng, Nt (計算時間範囲とステップ数)
+ 10.0, 201 (時間範囲[micro sec], 時間ステップ数)
+# tout_s, tout_e, nout (output control: time window & steps) (スナップショットを出力する時刻)
+  0.0, 10.0, 20 (開始時間，終了時間，出力時刻の数)
+# Initial Condition  (初期条件)
+# field type(0:v3, 1:q1, 2:q2, -1: quicent past) (指定する場のタイプ)
+ -1 (現在は-1のみ指定可能: 速度、応力とも全て0に設定される）
+

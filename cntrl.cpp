@@ -132,15 +132,15 @@ void CNTRL::time_setting(char *fname){
 	fgets(cbff,128,fp);
 	int ftyp;
 	fscanf(fp,"%d\n",&ftyp);
-	double xs,ys,sig,f0;
-	fgets(cbff,128,fp);
-	fscanf(fp,"%lf, %lf, %lf, %lf\n",&xs,&ys,&sig,&f0);
-	printf("xs=(%lf, %lf), sig=%lf, p0=%lf\n",xs,ys,sig,f0);
-
-	if(ftyp==0) v3.set_IC(xs,ys,sig,f0);
-	if(ftyp==1) q1.set_IC(xs,ys,sig,f0);
-	if(ftyp==2) q2.set_IC(xs,ys,sig,f0);
-	//pr.fwrite(0);
+	if(ftyp==1){
+		double xs,ys,sig,f0;
+		fgets(cbff,128,fp);
+		fscanf(fp,"%lf, %lf, %lf, %lf\n",&xs,&ys,&sig,&f0);
+		printf("xs=(%lf, %lf), sig=%lf, p0=%lf\n",xs,ys,sig,f0);
+		if(ftyp==0) v3.set_IC(xs,ys,sig,f0);
+		if(ftyp==1) q1.set_IC(xs,ys,sig,f0);
+		if(ftyp==2) q2.set_IC(xs,ys,sig,f0);
+	}
 
 	fclose(fp);
 };
@@ -511,20 +511,17 @@ void CNTRL::fwrite_ary(){
 	FILE *fp;
 
 	//	ARRAY WAVEFORMS 
-	sprintf(fname,"ary%d.out",round);
+	sprintf(fname,"T%d/ary.out",round);
 	fp=fopen(fname,"w");
 	fprintf(fp,"# nele, Nt\n");
 	fprintf(fp,"%d, %d\n",nsrc,Nt);
 	for(j=0;j<nsrc;j++){
 		fprintf(fp,"# e=%d, %lf, %lf\n",j,srcs[j].x0,srcs[j].y0);
 		for(k=0;k<Nt;k++){
-//			fprintf(fp,"%lf, %lf\n",dt*k, srcs[j].mean_amp(k));
 			fprintf(fp,"%lf, %lf\n",dt*k, srcs[j].amp_synth(k));
 		}
 	};
 	fclose(fp);
-	// 	RECVR class output
-	//for(j=0; j<nrec; j++) recs[j].fwrite(round);
 };
 void CNTRL::snapshot(int n_meas, int isum){
 	v3.fwrite_trim(n_meas,isum,NHa,NHb);

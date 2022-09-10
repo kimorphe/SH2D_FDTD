@@ -11,6 +11,9 @@ git add inwv0.dat
 
 git add Demo1/*.inp
 git add Demo1/inwv0.dat
+git add Demo1/*.txt
+git add Demo1/*.sh
+git add Demo1/*.html
 
 git commit
 git push -u origin master

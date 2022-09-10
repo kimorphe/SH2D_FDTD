@@ -1,0 +1,18 @@
+# wave type (0: zero, 1:sin 2:cos ) 基本波形のタイプ
+ 2 (cosine波を選択)
+# Nt (number of data) データ点数
+ 201 (201点のデータ点で波形を表現)
+# T0, nbrst (fundamental period, burst cycles) (基本周期とバーストサイクル) 
+ 1.0 2 (1.0[micro sec], 2サイクル)
+# kn (narrowness factor for Gaussian amplitude modulation) (Gauss関数による振幅変調のパラメータ)
+ 4  (この数字が大きい程幅の狭いGauss関数で変調され，パルス的な波形に近づく)
+# t1, t2 (時間範囲)
+ 0.0 10.0 (開始、終了時刻)
+# amp (read only when negative wave type is specified) (この行は残しておく)
+ 負のwave typeが指定された場合は、以下に記述された振幅値が利用される
+ (ここでは未使用のため空欄にしておく)
+
+
+*注意*
+ ここでのデータ点数や時間範囲は、波形関数の定義だけに用いられる。
+ FDTD計算の時間範囲や時間ステップ数はtset.inpに記入した数値が用いられる．

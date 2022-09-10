@@ -1,0 +1,25 @@
+# nsrc(number of source/receiver element) 
+ 2 (送受信素子数 -->以下の欄に2つの送受素子に関するパラメータを各行に記入する)　
+# type, xy, wd, nml, wvID, th_in (type=1:v1, 2:v2, posi., width, normal, wvfm No, th_in[deg]) 素子のパラメータ
+ 2, 0.0, 10.0, -1,  0, 0.0 (grid type, 位置(xあるいはy座標)，幅，向き, 入力波形番号，入射角度)
+ 2, 0.0, 10.0,  1,  0, 0.0 (同上)
+
+
+<<説明>>
+(1) grid type
+ 1: \sigma_31グリッドを送信位置に指定
+ 2: \sigma_32グリッドを送信位置に指定
+(2) 位置(素子中央の座標)
+ grid type=1 ならy座標
+ grid type=2 ならx座標
+　と解釈される
+(3) 幅(素子幅)
+(4) 向き
+ grid type=1: +1は右向き，-1は左向きの面を表す
+ grid type=2: +1は上向き，-1は下向きの面を表す
+(5) 入力波形番号 k
+ inwv{k}.datが加振波形として用いられる．
+ ここでは、k=0としているので、inwv0.dat
+(6) 入射角度[deg]　
+ grid間で遅延時間を設けて加振
+

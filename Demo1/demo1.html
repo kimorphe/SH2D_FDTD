@@ -1,0 +1,33 @@
+<!doctype html>
+<head>
+	<meata charset="UTF-8">
+	<title>Demo 1</title>
+</head>
+
+<body>
+<center>
+	<h2>計算例１</h2>
+	2つのトランスデューサを用いた送受信
+</center>
+<h2>入力データ</h2>
+<ul>
+	<li> 計算領域の設定: geom.inp  <a href="geom.inp">(file)</a> <a href="geom.pdf">(format)</a> </li>
+	<li> 時間範囲の設定: test.inp  <a href="tset.inp">(file)</a> <a href="tset.pdf">(format)</a></li>
+	<li> 入射波形の設定: inwv0.dat <a href="inwv0.dat">(file)</a> <a href="inwv0.pdf">(format)</a></li>
+	<li> 送受信要素の設定: src.inp <a href="src.inp">(file)</a> <a href="src.pdf">(format)</a></li>
+	<li> 送受パターンの設定: array.inp <a href="array.inp">(file)</a> <a href="array.pdf">(format)</a></li> 
+</ul>
+<h2>実行手順</h2>
+<ol>
+	<li>上記の入力データを用意</li>
+	<li>計算結果を保存するためのdeirectory(T0, T1)の開設<br> 
+		mkdirコマンドで開設するか，python script<a href="../data_dir.py">../data_dir.py</a>を実行. 
+		<br>(既にdirectoryが存在する場合は，新たに開設されることはない)
+	<li>FDTD計算の実行</br> ../wveq2d </li>
+</ol>
+<h2>出力ファイル</h2>
+<ul>
+	<li> v3_*.out </li>
+	<li> ary.out </li>
+</ul>
+</body>
