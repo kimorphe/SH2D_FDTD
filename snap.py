@@ -13,8 +13,10 @@ class FLD:
 
         cmt=fp.readline()
         dat=fp.readline().strip().split(",");
-        wx=float(dat[0]); wy=float(dat[1])
-        Wd=[wx,wy]
+        #wx=float(dat[0]); wy=float(dat[1])
+        #Wd=[wx,wy]
+        x=float(dat[0]); y=float(dat[1])
+        Xb=[x,y]
 
         cmt=fp.readline()
         dat=fp.readline().strip().split(",");
@@ -32,12 +34,13 @@ class FLD:
         self.Ny=Ny
         self.Z=np.transpose(Z)
         self.Xa=np.array(Xa)
-        self.Wd=np.array(Wd)
+        self.Xb=np.array(Xb)
+        #self.Wd=np.array(Wd)
     def show(self,ax):
-        Xb=self.Xa+self.Wd
+        Xb=self.Xb;
         Xa=self.Xa;
         ext=[Xa[0],Xb[0],Xa[1],Xb[1]]
-        ax.imshow(self.Z,aspect=1.0,extent=ext,cmap="jet",origin="lower",vmin=-0.6,vmax=0.6)
+        ax.imshow(self.Z,aspect=1.0,extent=ext,cmap="jet",origin="lower",vmin=-0.2,vmax=0.2)
         ax.grid(True)
 
 if __name__=="__main__":

@@ -6,6 +6,11 @@
 void CNTRL::setup_domain(char *fname){
 	FILE *fp=fopen(fname,"r");
 	char cbff[128];	
+	if(fp==NULL){
+		printf("Cannot find file %s \n",fname);
+		printf(" --> abort process ...\n");
+		exit(-1);
+	};
 
 	// Load domain setting
 	fgets(cbff,128,fp); 
@@ -65,7 +70,9 @@ void CNTRL::setup_domain(char *fname){
 	fclose(ftmp);
 
 	dm.perfo_ellip(fname);
+	puts("ellip done");
 	dm.topography(fname);
+	puts("toppog done");
 	dm.out_kcell();
 	
 	// Setup staggered grid system 
@@ -448,7 +455,7 @@ void CNTRL::v2q(int itime){
 	int sgn,sft,iwv,i0;
 	i0=nsrc*round;
 	for(int isrc=0;isrc<nsrc;isrc++){
-		if(ary.actv[isrc]==0) continue;
+		if(ary.actv[isrc+i0]==0) continue;
 
 		src=srcs[isrc]; // SOURCE
 		iwv=src.iwv;

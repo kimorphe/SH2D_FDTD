@@ -164,11 +164,11 @@ void DOMAIN::topography(char *fname){
 					for(j=0;j<jy;j++) kcell[i][j]=1;
 				}
 			};
+		free(xknot);
+		free(yknot);
 		}	
 	}
-	};
-	free(xknot);
-	free(yknot);
+	};	// end of while loop
 	fclose(fp);
 
 };

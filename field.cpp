@@ -34,9 +34,11 @@ void FIELD::fwrite_trim(int d_num, int num, int *NHa, int *NHb){
 	fprintf(fp,"# Ng[0:1]\n");
 	fprintf(fp,"%d, %d\n",ngs[0],ngs[1]);
 	fprintf(fp,"# field value\n");
-	for(i=NHa[0]; i<ngs[0]; i++){
-	for(j=NHa[1]; j<ngs[1]; j++){
-		fprintf(fp,"%lf\n",F[i][j]);
+	//for(i=NHa[0]; i<ngs[0]; i++){
+	//for(j=NHa[1]; j<ngs[1]; j++){
+	for(i=0; i<ngs[0]; i++){
+	for(j=0; j<ngs[1]; j++){
+		fprintf(fp,"%lf\n",F[i+NHa[0]][j+NHa[1]]);
 	}
 	}
 	//printf("Xa=%lf, %lf\n",Xa[0],Xa[1]);
