@@ -1,0 +1,5 @@
+# nrec(number of receivers)
+ 0
+# type(1:v1, 2:v2), xy(location), wd(width), nml(normal), thr(angle[deg])
+ 1, 0.5, 0.5,  1,  0.0
+ 2, 3.5, 0.5, -1, 45.0

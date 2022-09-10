@@ -9,5 +9,8 @@ git add *.py
 git add *.inp
 git add inwv0.dat
 
+git add Demo1/*.inp
+git add Demo1/inwv0.dat
+
 git commit
 git push -u origin master
