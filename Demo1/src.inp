@@ -1,8 +1,8 @@
 # nsrc(number of source element)
  2
 # type, xy, wd, nml, wvID, th_in (type=1:v1, 2:v2, posi., width, normal, wvfm No, th_in[deg])
- 2, 0.0, 10.0, -1,  0, 0.0
- 2, 0.0, 10.0,  1,  0, 0.0
+ 2, -10.0, 10.0, -1,  0,  30.0
+ 2,  10.0, 10.0,  1,  0, -30.0
 
 
 

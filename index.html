@@ -48,6 +48,7 @@
 			<li><a href="./snap.py">snap.py</a> <--v3_*.out--> v3_***.png </li>
 			<li><a href="./bscan.py">bscan.py</a>: <-- ary*.out </li>
 			<li><a href="./data_dir.py">data_dir.py</a>: --> T* </li>
+			<li><a href="./mkpng.py">mkpng.py</a> v3_{*}.out --> v3_{*}.png (with OpenFileDialog)</li>
 		</ul>
 	<li>Auxillary programs:</li>
 		<ul>
@@ -140,7 +141,8 @@
 		<li>
 		9/10(Sat.)<br>
 		初期条件タイプ(tset.inp)が1の場合のみ、初期場が設定される形に変更(初期条件に関するパラメータ設定を不要とするため) <br>
-		sample inputの作成. geom.inp --> geom.txt --> geom.pdf (PDFへの変換はtxt2pdf.shで)
+		sample inputの作成. geom.inp --> geom.txt --> geom.pdf (PDFへの変換はtxt2pdf.shで)<br>
+		Fileopenダイアログを使ったpng画像作成pytho scriptの作成<br>
 		</li>
 	</ul>
 <h2>開発項目:</h2>
@@ -167,7 +169,9 @@
 		<li><s>RECVRの遅延合成機能</s>(9/7)</li>
 		<li><s>TRNSDCRクラス内での遅延合成</s>(9/8)</li>
 		<li>demo input dataの作成(TOFD, Beam steering, FMC)とdebug</li>
-		<li>snap.pyの効率化、colorbar追加</li>
+		<li><s>snap.pyの効率化</s>(9/10)、colorbar追加</li>
+		<li>斜角入射方法の修正(th_inが負の場合)</li>
+		<li>動画作成python/shell scriptの作成(FFmpeg)</li>
 		<li>定式化メモの作成</li>
 		<li>境界グリッドの重複した更新の防止</li>
 		<li>物体力のオプション</li>
@@ -183,6 +187,14 @@
 		<li>
 			<a href="https://www.sukerou.com/2018/07/libreoffice.html" target="blank">
 			Libreofficeをコマンドラインから使用する方法</a>
+		</li>
+		<li>
+			<a href="https://qiita.com/livlea/items/a94df4667c0eb37d859f">
+				連番pngファイルからの動画生成(FFmpeg)</a>	
+		</li>
+		<li>
+			<a href="https://mori-memo.hateblo.jp/entry/2022/02/19/135441">
+			pythonによるイベント処理</a>
 		</li>
 	</ul>
 </body>
