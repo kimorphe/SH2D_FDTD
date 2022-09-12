@@ -15,5 +15,7 @@ git add Demo1/*.txt
 git add Demo1/*.sh
 git add Demo1/*.html
 
+git add Qt/*.py
+
 git commit
 git push -u origin master
