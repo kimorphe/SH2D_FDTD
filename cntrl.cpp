@@ -473,6 +473,7 @@ void CNTRL::v2q(int itime){
 				i=src.isrc[k];
 				j=src.jsrc[k];
 				tdly=src.Ctd*k+tdly0;
+				if(src.Ctd<0.0) tdly=(k-src.ng)*src.Ctd+tdly0;	// negative incident angle
 				bvl=wvs[iwv].val(itime*dt-tdly)*a0;
 				//dFx=sgn*(bvl-F[i-sft][j])/dx[0]*dt/rho;
 				//q1.F[i][j]+=dFx;
@@ -484,6 +485,7 @@ void CNTRL::v2q(int itime){
 				i=src.isrc[k];
 				j=src.jsrc[k];
 				tdly=src.Ctd*k+tdly0;
+				if(src.Ctd<0.0) tdly=(k-src.ng)*src.Ctd+tdly0;	// negative incident angle
 				bvl=wvs[iwv].val(itime*dt-tdly)*a0;
 				//dFy=sgn*(bvl-F[i][j-sft])/dx[1]*dt/rho;
 				//q2.F[i][j]+=dFy;

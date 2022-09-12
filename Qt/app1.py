@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import (
     QComboBox,
 )
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import numpy as np
 from mkpng import FLD
 
@@ -149,6 +150,9 @@ class MainWindow(QMainWindow):
             v3.load(fn)
             if k==0:
                 im=v3.show(ax,vmin=v1,vmax=v2, cmap=cmap, interpolation=intpl)
+                divider=make_axes_locatable(ax)
+                cax=divider.append_axes("right",size="5%",pad=0.05)
+                plt.colorbar(im,cax=cax)
             else:
                 im.set_data(v3.Z)
             fout=fn.replace("out","png")

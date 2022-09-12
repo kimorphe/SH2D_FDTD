@@ -1,9 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
 import sys
 from PyQt5.QtWidgets import (QMainWindow, QFileDialog, QApplication)
-#from PyQt5.QtWidgets import (QMainWindow, QTextEdit, QAction, QFileDialog, QApplication)
-#from PyQt5.QtGui import QIcon
+
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
