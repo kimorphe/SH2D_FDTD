@@ -5,40 +5,54 @@ import matplotlib.pyplot as plt
 class WVs:
     def load(self,fname):
         fp=open(fname,"r")
-        print(fp.readline())
+
+        fp.readline()
+        nele=int(fp.readline())
+
+        fp.readline()
         dat=fp.readline().strip().split(",")
-        nele=int(dat[0]);
-        Nt=int(dat[1])
-        print(nele,Nt)
+        Nt=int(dat[0])
+        dt=float(dat[1])
 
         ndat=Nt*nele;
-        time=np.zeros(ndat)
         amp=np.zeros(ndat)
         m=0;
+        xrec=[]; yrec=[]
         for k in range(nele):
-            print(fp.readline())
+            dat=fp.readline()
+            dat=dat.strip().split(",")
+            xrec.append(float(dat[1]))
+            yrec.append(float(dat[2]))
             for l in range(Nt):
-                dat=fp.readline().strip().split(",")
-                time[m]=float(dat[0])
-                amp[m]=float(dat[1])
+                amp[m]=float(fp.readline())
                 m+=1
-        self.time=np.reshape(time,[nele,Nt])
+
+        self.time=np.arange(Nt)*dt
+        self.dt=dt
         self.amp=np.reshape(amp,[nele,Nt])
         self.Nt=Nt
         self.nele=nele
+        self.xrec=xrec
+        self.yrec=yrec
+    def show_prms(self):
+        print("nele=",self.nele)
+        print("Nt,dt=",self.Nt,", ",self.dt)
+        for k in range(self.nele):
+            print(self.xrec[k],", ",self.yrec[k])
+
     def Aplot(self, ax):
         for k in range(self.nele):
-            ax.plot(self.time[k,:], self.amp[k,:])
+            ax.plot(self.time, self.amp[k,:])
 
 if __name__=="__main__":
     bwv=WVs()
-    #bwv.load("ary0.out");
-    bwv.load("ary1.out");
+    bwv.load("ary.out");
 
     fig=plt.figure()
     ax=fig.add_subplot(111)
     bwv.Aplot(ax)
     ax.grid(True)
+    bwv.show_prms()
 
     plt.show()
 

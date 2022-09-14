@@ -515,12 +515,14 @@ void CNTRL::fwrite_ary(){
 	//	ARRAY WAVEFORMS 
 	sprintf(fname,"T%d/ary.out",round);
 	fp=fopen(fname,"w");
-	fprintf(fp,"# nele, Nt\n");
-	fprintf(fp,"%d, %d\n",nsrc,Nt);
+	fprintf(fp,"# nele\n");
+	fprintf(fp,"%d\n",nsrc);
+	fprintf(fp,"# Nt, dt\n");
+	fprintf(fp,"%d, %lf\n",Nt,dt);
 	for(j=0;j<nsrc;j++){
 		fprintf(fp,"# e=%d, %lf, %lf\n",j,srcs[j].x0,srcs[j].y0);
 		for(k=0;k<Nt;k++){
-			fprintf(fp,"%lf, %lf\n",dt*k, srcs[j].amp_synth(k));
+			fprintf(fp,"%lf\n",srcs[j].amp_synth(k));
 		}
 	};
 	fclose(fp);
