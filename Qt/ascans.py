@@ -16,6 +16,8 @@ from PyQt5.QtWidgets import (
         QPushButton,
         QLabel,
         QFileDialog,
+        QSpinBox,
+        QRadioButton,
 ) 
 class MplCanvas(FigureCanvasQTAgg):
     def __init__(self,parent=None, width=5, height=4, dpi=100):
@@ -61,9 +63,11 @@ class WVs:
         for k in range(self.nele):
             print(self.xrec[k],", ",self.yrec[k])
 
-    def Aplot(self, ax):
+    def Aplots(self, ax):
         for k in range(self.nele):
             ax.plot(self.time, self.amp[k,:])
+    def Aplot(self, ax,num):
+        ax.plot(self.time, self.amp[num,:])
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -79,11 +83,58 @@ class MainWindow(QMainWindow):
         layout.addWidget(toolbar)
         layout.addWidget(canvas)
 
+        layout2=QHBoxLayout()
+        spbT=QSpinBox(); 
+        spbT.setRange(1,1); 
+        spbT.setSingleStep(1); 
+        spbT.setPrefix("T="); 
+        spbT.valueChanged.connect(self.draw_Ascan)
+
+        spbR=QSpinBox()
+        spbR.setRange(1,1)
+        spbR.setSingleStep(1)
+        spbR.setPrefix("R=");
+        spbR.valueChanged.connect(self.draw_Ascan)
+
+        btn2=QPushButton("clear")
+        btn2.clicked.connect(self.clear_canvas)
+        layout2.addWidget(spbT)
+        layout2.addWidget(spbR)
+
+        rbtn=QRadioButton()
+        lbl=QLabel("freez y-limit")
+        #rbtn.setChecked(True)
+        layout2.addWidget(lbl)
+        layout2.addWidget(rbtn)
+        layout2.addWidget(btn2)
+
+        layout.addLayout(layout2)
+
         wgt=QWidget()
         wgt.setLayout(layout)
         self.setCentralWidget(wgt)
 
         self.canvas=canvas
+        self.spbT=spbT
+        self.spbR=spbR
+        self.rbtn=rbtn
+
+    def clear_canvas(self):
+        self.canvas.axes.cla()
+        self.canvas.draw()
+    def draw_Ascan(self):
+        self.canvas.axes.plot()
+        T=self.spbT.value()-1 # get integer type value
+        R=self.spbR.value()-1 # get integer type value
+        print("draw Ascan called")
+        bw=self.bwvs[T]
+        ylim=self.canvas.axes.get_ylim()
+        bw.Aplot(self.canvas.axes,R)
+        #ylim=[-0.1,0.1]
+        if self.rbtn.isChecked():
+            self.canvas.axes.set_ylim(ylim)
+
+        self.canvas.draw() 
 
     def select_dir(self):
         dir_name=QFileDialog.getExistingDirectory(self,"Select Directory","./",QFileDialog.ShowDirsOnly)
@@ -106,13 +157,24 @@ class MainWindow(QMainWindow):
             bwv.load(fname)
             bwv.show_prms()
             bwvs.append(bwv)
-        fig=plt.figure()
-        ax=fig.add_subplot(111)
+        #fig=plt.figure()
+        #ax=fig.add_subplot(111)
         T=0
         R=1
         bw=bwvs[T]
-        bw.Aplot(self.canvas.axes)
+        #bw.Aplot(self.canvas.axes)
+        #self.canvas.draw()
+
+        self.spbT.setRange(1,ary.N_meas)
+        self.spbR.setRange(1,ary.nele)
+
+        T=self.spbT.value()-1 # get integer type value
+        R=self.spbR.value()-1 # get integer type value
+        bw=bwvs[T]
+        bw.Aplot(self.canvas.axes,R)
         self.canvas.draw()
+
+        self.bwvs=bwvs
 
 
         """
