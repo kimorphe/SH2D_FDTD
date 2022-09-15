@@ -61,6 +61,7 @@ double TRNSDCR::amp_synth(int it){
 	double amp=0.0,tt;
 	for(ig=0;ig<ng;ig++){
 		tt=it*dt-ig*Ctd;
+		if(Ctd<0.0) tt=it*dt+(ng-1-ig)*Ctd;
 		amp+=val(ig,tt);
 	};
 	return(amp/ng);

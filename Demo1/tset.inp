@@ -1,7 +1,7 @@
 # Trng, Nt
- 10.0, 201
+ 12.0, 241
 # tout_s, tout_e, nout (output control: time window & steps)
-  0.0, 10.0, 20
+  0.0, 12.0, 20
 # Initial Condition 
 # field type(0:v3, 1:q1, 2:q2)
  -1

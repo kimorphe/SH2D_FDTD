@@ -20,7 +20,7 @@ from PyQt5.QtWidgets import (
         QRadioButton,
 ) 
 class MplCanvas(FigureCanvasQTAgg):
-    def __init__(self,parent=None, width=5, height=4, dpi=100):
+    def __init__(self,parent=None, width=8, height=4, dpi=100):
         fig=plt.figure(figsize=(width,height),dpi=dpi)
         self.axes=fig.add_subplot(111)
         super(MplCanvas, self).__init__(fig)
@@ -51,6 +51,7 @@ class WVs:
                 m+=1
 
         self.time=np.arange(Nt)*dt
+        self.tlim=[self.time[0],self.time[-1]]
         self.dt=dt
         self.amp=np.reshape(amp,[nele,Nt])
         self.Nt=Nt
@@ -75,7 +76,7 @@ class MainWindow(QMainWindow):
 
         btn1=QPushButton("select directory") 
         btn1.clicked.connect(self.select_dir)
-        canvas=MplCanvas(self,width=5,height=4, dpi=100)
+        canvas=MplCanvas(self,width=8,height=3, dpi=100)
         toolbar=NavigationToolbar(canvas,self)
 
         layout=QVBoxLayout()
@@ -88,16 +89,20 @@ class MainWindow(QMainWindow):
         spbT.setRange(1,1); 
         spbT.setSingleStep(1); 
         spbT.setPrefix("T="); 
-        spbT.valueChanged.connect(self.draw_Ascan)
+        #spbT.valueChanged.connect(self.draw_Ascan)
 
         spbR=QSpinBox()
         spbR.setRange(1,1)
         spbR.setSingleStep(1)
         spbR.setPrefix("R=");
-        spbR.valueChanged.connect(self.draw_Ascan)
+        #spbR.valueChanged.connect(self.draw_Ascan)
 
         btn2=QPushButton("clear")
         btn2.clicked.connect(self.clear_canvas)
+        btn3=QPushButton("draw")
+        btn3.clicked.connect(self.draw_Ascan)
+        btn3.setEnabled(False)
+
         layout2.addWidget(spbT)
         layout2.addWidget(spbR)
 
@@ -106,6 +111,7 @@ class MainWindow(QMainWindow):
         #rbtn.setChecked(True)
         layout2.addWidget(lbl)
         layout2.addWidget(rbtn)
+        layout2.addWidget(btn3)
         layout2.addWidget(btn2)
 
         layout.addLayout(layout2)
@@ -118,19 +124,20 @@ class MainWindow(QMainWindow):
         self.spbT=spbT
         self.spbR=spbR
         self.rbtn=rbtn
+        self.btn3=btn3
 
     def clear_canvas(self):
         self.canvas.axes.cla()
         self.canvas.draw()
     def draw_Ascan(self):
-        self.canvas.axes.plot()
+        #self.canvas.axes.plot()
         T=self.spbT.value()-1 # get integer type value
         R=self.spbR.value()-1 # get integer type value
-        print("draw Ascan called")
         bw=self.bwvs[T]
         ylim=self.canvas.axes.get_ylim()
         bw.Aplot(self.canvas.axes,R)
         #ylim=[-0.1,0.1]
+        self.canvas.axes.set_xlim(self.bwvs[0].tlim)
         if self.rbtn.isChecked():
             self.canvas.axes.set_ylim(ylim)
 
@@ -141,6 +148,7 @@ class MainWindow(QMainWindow):
         print("Selected directory=",dir_name)
         self.dir_name=dir_name
         #print("Files & Directies: ", os.listdir(dir_name))
+        self.btn3.setEnabled(True)
 
         fn_ary=dir_name+"/"+"array.inp"
         fn_src=dir_name+"/"+"src.inp"
@@ -170,25 +178,10 @@ class MainWindow(QMainWindow):
 
         T=self.spbT.value()-1 # get integer type value
         R=self.spbR.value()-1 # get integer type value
-        bw=bwvs[T]
-        bw.Aplot(self.canvas.axes,R)
-        self.canvas.draw()
-
+        #bw=bwvs[T]
+        #bw.Aplot(self.canvas.axes,R)
+        #self.canvas.draw()
         self.bwvs=bwvs
-
-
-        """
-        dirs=glob.glob(dir_name+"/*/")
-        print("Directories:", dirs)
-        for dat in dirs:
-            print("Base name=",os.path.basename(dat.rstrip("/")))
-            fname=os.path.basename(dat.rstrip("/"))+"/ary.out"
-            fname=dir_name+"/"+fname
-            print("File name",fname)
-            
-            bwv.load(fname)
-            bwv.show_prms()
-        """
 
 class ary_prms:
     def __init__(self,fname):
