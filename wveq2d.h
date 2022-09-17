@@ -3,6 +3,7 @@
 #include<math.h>
 #include"wave1d.h"
 //--------------------------------------------------------------------------
+void show_msg(char *fn);
 class FIELD{
 	public:
 		int Ng[2];
@@ -12,7 +13,8 @@ class FIELD{
 		double **F;
 		void print_F();
 		void init(int *Ndiv, int ityp);
-		int type; 	// 0: pr, 1:v1, 2: v2, 3:vertices
+		int type; 	// 0: v3, 1:q1=s31, 2: q2=s32, 3:vertices
+		char stype[6]; 	// v3, q1=s31, q2=s32, vertice
 		void setup(double *Xa, double *Wd, double *dx);
 		double *Xa,*Wd,*dx;
 		double xf[2];
@@ -30,6 +32,7 @@ class FIELD{
 		int *kbnd, *kint;
 		int Nin,Nbnd,Nex;
 		void clear();
+		void fwrite_prms(char *fn, char *mode, char *name);
 	private:
 };
 class SOURCE{
@@ -68,6 +71,7 @@ class TRNSDCR: public SOURCE{
 		void clear();
 	private:
 };
+/*
 class RECVR{
 	public:
 		int ID;		
@@ -94,6 +98,7 @@ class RECVR{
 		void clear();
 	private:
 };
+*/
 class ARRAY{
 	public:
 		int nele;	// number of array elements
@@ -112,6 +117,7 @@ class DOMAIN{
 	public:
 		double *Xa, *Wd, *dx; 	// domain location, width, cell size
 		double *Ha, *Hb;	// PML thickness 
+		int *NHa, *NHb;	
 		int **kcell; 	// geometry ( binary image )
 		int *Ndiv,ndat; // number of cells 
 		void init(int *Ndiv); // allocate 2D kcell array
@@ -132,6 +138,7 @@ class DOMAIN{
 		double PML_dcy(int idir, double xy); // evaluate PML decay constant 
 		void PML_setup(double gm);
 		double A0[2],B0[2];
+		void fwrite();
 	private:
 };
 class CNTRL{
@@ -149,7 +156,7 @@ class CNTRL{
 		FIELD v3,q1,q2; 
 		FIELD v3x,v3y;
 		TRNSDCR *srcs;		
-		RECVR *recs;
+//		RECVR *recs;
 		Wv1D *wvs;
 		ARRAY ary;
 		int round;

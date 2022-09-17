@@ -44,6 +44,25 @@ void DOMAIN::print_prms(){
 	printf("dx=%lf, %lf\n",dx[0],dx[1]);
 	printf("--------------------------------------\n");
 };
+void DOMAIN::fwrite(){
+	FILE *fp=fopen("domain.out","w");
+
+	fprintf(fp,"  Xa=(%lf, %lf)\n",Xa[0],Xa[1]);
+	fprintf(fp,"  Wd=(%lf, %lf)\n",Wd[0],Wd[1]);
+	fprintf(fp,"Ndiv=(%d, %d)\n",Ndiv[0],Ndiv[1]);
+	fprintf(fp,"  dx=(%lf, %lf)\n",dx[0],dx[1]);
+	fprintf(fp,"---------  PML ----------\n");
+	fprintf(fp,"  Ha=(%lf, %lf)\n",Ha[0],Ha[1]);
+	fprintf(fp,"  Hb=(%lf, %lf)\n",Hb[0],Hb[1]);
+	fprintf(fp," NHa=(%d, %d)\n",NHa[0],NHa[1]);
+	fprintf(fp," NHb=(%d, %d)\n",NHa[0],NHa[1]);
+	fprintf(fp,"---Material Consntants---\n");
+	fprintf(fp,"  ct=%lf [km/s]\n",ct);
+	fprintf(fp," rho=%lf [g/cm3]\n",rho);
+	fprintf(fp," amu=%lf [GPa]\n",amu);
+	fclose(fp);
+	printf("Domain setting written to 'domain.out' \n");
+};
 void DOMAIN::init(int *nxy){
 	Ndiv=nxy;
 	ndat=Ndiv[0]*Ndiv[1];
@@ -76,11 +95,7 @@ void DOMAIN::perfo_ellip(char *fname){
 	FILE *fp;
 	char cbff[8];
 	fp=fopen(fname,"r");
-	if(fp==NULL){
-		puts("Can't open file from Dom2D::perfo_ellip !");
-		puts(fname);
-		exit(-1);
-	}
+	if(fp==NULL) show_msg(fname); 
 	i=0;
 	while(fgets(cbff,8,fp) !=NULL){
 		if(strcmp(cbff,"##Ellip")==0){
@@ -131,11 +146,7 @@ void DOMAIN::topography(char *fname){
 	int nseg;
 	char cbff[9];
 
-	if(fp==NULL){
-		puts("Can't open file from Dom2D::perfo_ellip !");
-		puts(fname);
-		exit(-1);
-	}
+	if(fp==NULL) show_msg(fname);
 
 	int i,j,jy;
 	int isgn=1;

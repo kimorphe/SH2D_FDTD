@@ -3,14 +3,17 @@
 #include<math.h>
 #include"wveq2d.h"
 
+void show_msg(char *fn){
+	printf("Cannot find file %s \n",fn);
+	printf(" --> abort process ...\n");
+	exit(-1);
+
+};
 void CNTRL::setup_domain(char *fname){
 	FILE *fp=fopen(fname,"r");
 	char cbff[128];	
-	if(fp==NULL){
-		printf("Cannot find file %s \n",fname);
-		printf(" --> abort process ...\n");
-		exit(-1);
-	};
+
+	if(fp==NULL) show_msg(fname);
 
 	// Load domain setting
 	fgets(cbff,128,fp); 
@@ -49,6 +52,8 @@ void CNTRL::setup_domain(char *fname){
 	dm.setup(Xa,Wd,dx);
 	dm.ct=ct; dm.rho=rho; dm.amu=amu;
 	dm.init(Ndiv);
+	dm.NHa=NHa;
+	dm.NHb=NHb;
 
 	double gmm=1.e-04;	// expected decay 
 	dm.Ha=Ha;
@@ -70,10 +75,9 @@ void CNTRL::setup_domain(char *fname){
 	fclose(ftmp);
 
 	dm.perfo_ellip(fname);
-	puts("ellip done");
 	dm.topography(fname);
-	puts("toppog done");
-	dm.out_kcell();
+	dm.out_kcell();		// write kcell data 
+	dm.fwrite();	// write domain setting
 	
 	// Setup staggered grid system 
 	v3.init(Ndiv,0);	
@@ -99,6 +103,14 @@ void CNTRL::setup_domain(char *fname){
 	q1.gen_indx1(dm.kcell);
 	q2.gen_indx2(dm.kcell);
 
+	char fnf[128]="field_setting.out";
+	char md[6]="w",name[6];
+	sprintf(name,"v3"); v3.fwrite_prms(fnf,md,name);
+	sprintf(md,"a");
+	sprintf(name,"v3x"); v3x.fwrite_prms(fnf,md,name);
+	sprintf(name,"v3y"); v3y.fwrite_prms(fnf,md,name);
+	sprintf(name,"q1"); q1.fwrite_prms(fnf,md,name);
+	sprintf(name,"q2"); q2.fwrite_prms(fnf,md,name);
 };
 
 bool CNTRL::out_time(int it){
@@ -112,12 +124,12 @@ bool CNTRL::out_time(int it){
 void CNTRL::time_setting(char *fname){
 	FILE *fp=fopen(fname,"r");
 	char cbff[128];	
+	if(fp==NULL) show_msg(fname);
 
 	fgets(cbff,128,fp);
 	fscanf(fp,"%lf, %d\n",&Tf, &Nt);
 	dt=Tf/(Nt-1);
-	printf("dt=%lf, Nt=%d, Tf=%lf\n",dt,Nt,Tf);
-	CNTRL::CFL();
+	printf("CFL=%lf\n",CNTRL::CFL());
 
 	fgets(cbff,128,fp);
 	fscanf(fp,"%lf, %lf, %d\n",&tout_s, &tout_e, &Nout);
@@ -126,7 +138,6 @@ void CNTRL::time_setting(char *fname){
 	iout=floor(tout_s/dt);
 	if(iout==0) iout+=Ninc;
 	iout0=iout;
-	printf("Ninc=%d, iout=%d\n",Ninc, iout);
 
 	fgets(cbff,128,fp);
 	fgets(cbff,128,fp);
@@ -143,6 +154,19 @@ void CNTRL::time_setting(char *fname){
 	}
 
 	fclose(fp);
+
+	fp=fopen("time_setting.out","w");
+	fprintf(fp,"tlim=[ %lf, %lf]\n",0.0,Tf);
+	fprintf(fp,"  Nt=%d\n",Nt);
+	fprintf(fp,"  dt=%lf\n",dt);
+	fprintf(fp," CFL=%lf\n",CNTRL::CFL());
+	fprintf(fp,"Nout=%d\n",Nout);
+	fprintf(fp,"Ninc=%d,(tinc=%lf)\n",Ninc,Ninc*dt);
+	fprintf(fp,"iout_start=%d,(tout_start=%lf)\n",iout0, iout0*dt);
+	fprintf(fp,"ftyp=%d (I.C. type, currently only -1 is allowed)\n",ftyp);
+	fclose(fp);
+	printf("Temporal setting written to 'time_setting.out'\n");
+	
 };
 void CNTRL::wvfm_setting(char *fname){
 	wvs=(Wv1D *)malloc(sizeof(Wv1D)*nwv);
@@ -253,11 +277,7 @@ int CNTRL::src_setting(char *fname){
 void CNTRL::array_setting(char *fname){
 	FILE *fp=fopen(fname,"r");
 	char cbff[128];	
-	if(fp==NULL){
-		printf("File %s cannot found !\n",fname);
-		printf(" --> abort process..\n");
-		exit(-1);
-	};
+	if(fp==NULL) show_msg(fname);
 	int nele,nmeas;
 	fgets(cbff,128,fp);
 	fscanf(fp,"%d\n",&nele);
@@ -282,6 +302,7 @@ void CNTRL::array_setting(char *fname){
 	ary.print();
 	fclose(fp);
 };
+/*
 int CNTRL::rec_setting(char *fname){
 	FILE *fp=fopen(fname,"r");
 	char cbff[128];	
@@ -363,7 +384,9 @@ int CNTRL::rec_setting(char *fname){
 
 	return(nrec);
 };
+*/
 
+/*
 void CNTRL::record(int jt){
 	int i,j,type;
 	for(j=0;j<nrec;j++){
@@ -372,7 +395,7 @@ void CNTRL::record(int jt){
 		if(type==2) recs[j].record(jt,q2.F);
 	}
 };
-
+*/
 void CNTRL::capture(int jt){
 	int i,j,type;
 	for(j=0;j<nsrc;j++) srcs[j].record(jt,v3.F);
@@ -383,7 +406,6 @@ double CNTRL::CFL(){
 	if(dh >dx[1]) dh=dx[1];
 	dh=sqrt(dx[0]*dx[0]+dx[1]*dx[1]);
 	Crt=ct*dt/dh;
-	printf("Crt=%lf\n",Crt);
 	if(Crt>1.0){
 		printf(" stability condition is not satisfied !!\n --> abort proces\n");
 		exit(-1);
@@ -504,7 +526,7 @@ void CNTRL::clear(){
 	v3x.clear();
 	v3y.clear();
 	for(int i=0;i<nsrc;i++) srcs[i].clear();
-	for(int i=0;i<nrec;i++) recs[i].clear();
+//	for(int i=0;i<nrec;i++) recs[i].clear();
 	iout=iout0;
 };
 void CNTRL::fwrite_ary(){

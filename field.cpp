@@ -10,13 +10,8 @@ void FIELD::fwrite_trim(int d_num, int num, int *NHa, int *NHb){
 	if(type==1) sprintf(fname,"T%d/q1_%d.out",d_num,num);
 	if(type==2) sprintf(fname,"T%d/q2_%d.out",d_num,num);
 	FILE *fp=fopen(fname,"w");
-	if(fp==NULL){
-		printf("Can't open %s\n",fname);
-		printf(" first create output directory T* of necessary numbers\n");
-		exit(-1);
-	};
+	if(fp==NULL) show_msg(fname);
 	int i,j;
-
 	double xll[2], wdt[2];
 	int ngs[2];
 	for(i=0;i<2;i++){
@@ -53,11 +48,7 @@ void FIELD::fwrite(int d_num, int num){
 	if(type==1) sprintf(fname,"T%d/q1_%d.out",d_num,num);
 	if(type==2) sprintf(fname,"T%d/q2_%d.out",d_num,num);
 	FILE *fp=fopen(fname,"w");
-	if(fp==NULL){
-		printf("Cant open %s",fname);
-		printf(" check if output directory exists\n");
-		exit(-1);
-	};
+	if(fp==NULL) show_msg(fname);
 	int i,j;
 
 	fprintf(fp,"# Xa[0:1]\n");
@@ -86,6 +77,19 @@ void FIELD::print_prms(){
 	printf("type=%d\n",type);
 	printf("ofst[2]=(%lf, %lf)\n",ofst[0],ofst[1]);
 	printf("---------------------------------\n");
+};
+void FIELD::fwrite_prms(char *fn, char *mode, char *name){
+	FILE *fp=fopen(fn,mode);
+	if(fp==NULL) show_msg(fn);
+
+	fprintf(fp,"--------------%s--------------\n",name);
+	fprintf(fp,"type=%s (=%d)\n",stype,type);
+	fprintf(fp,"Ndiv=%d, %d\n",Ndiv[0],Ndiv[1]);
+	fprintf(fp,"Ng=%d, %d\n",Ng[0],Ng[1]);
+	fprintf(fp,"ofst[2]=(%lf, %lf)\n",ofst[0],ofst[1]);
+	fprintf(fp,"Nin=%d, Nbnd=%d, Nex=%d\n",Nin,Nbnd,Nex);
+
+	fclose(fp);
 };
 void FIELD::set_IC(double xc, double yc, double sig, double f0){
 	int i,j;
@@ -127,22 +131,26 @@ void FIELD::init(int *ndiv, int ityp){
 	Ndiv=ndiv;
 	Ng[0]=Ndiv[0];
 	Ng[1]=Ndiv[1];
+	sprintf(stype,"v3");
 
 	ofst[0]=0.5;
 	ofst[1]=0.5;
 	if(type==1){	// q1-grid
 		ofst[0]=0.0;
 		Ng[0]+=1;
+		sprintf(stype,"q1(=s31)");
 	};
 	if(type==2){	// q2-grid
 		ofst[1]=0.0;
 		Ng[1]+=1;
+		sprintf(stype,"q2(=s32)");
 	}
 	if(type==3){	// vertices
 		ofst[0]=0.0;
 		ofst[1]=0.0;
 		Ng[0]+=1;
 		Ng[1]+=1;
+		sprintf(stype,"vertice(not used)");
 	};
 
 	ndat=Ng[0]*Ng[1];
@@ -200,7 +208,6 @@ void FIELD::gen_indx1(int **kcell){
 			kbnd=(int *)malloc(sizeof(int)*Nbnd);
 		}
 	}
-	printf("Nin=%d Nbnd=%d Nex=%d\n",Nin,Nbnd,Nex);
 };
 //		GENERATE 1D INDEX FOR q2 
 void FIELD::gen_indx2(int **kcell){
@@ -239,7 +246,6 @@ void FIELD::gen_indx2(int **kcell){
 			kbnd=(int *)malloc(sizeof(int)*Nbnd);
 		}
 	}
-	printf("Nin=%d Nbnd=%d Nex=%d\n",Nin,Nbnd,Nex);
 };
 //		GENERATE 1D INDEX FOR v3 
 void FIELD::gen_indx0(int **kcell){
