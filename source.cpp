@@ -25,6 +25,7 @@ void SOURCE::set_center(){
 };
 void SOURCE::set_inc_ang(double th, double ct){
 	double PI=4.0*atan(1.0);
+	th_in=th;
 	th=th/180.*PI;	
 	Ctd=sin(th)/ct*dx[type-1];
 };
@@ -78,6 +79,30 @@ void TRNSDCR::record(int jt, double **fld){
 		bwv[ig][jt]=fld[i][j]; 
 	};
 };
+void TRNSDCR::fwrite_setting(char *fn, char *mode, int num){
+	FILE *fp=fopen(fn,mode);
+	if(fp==NULL) show_msg(fn);
+
+	fprintf(fp,"#---------- T/R=%d -----------\n",ID);
+	fprintf(fp,"# type=%d, nrml=%d\n",type,nml);
+	fprintf(fp,"# th_in=%lf[deg], Ctd=%lf\n",Ctd,th_in);
+	double x,y;
+	double xofst=0.5, yofst=0.5;
+	if(type==1) xofst=0.0;
+	if(type==2) yofst=0.0;
+	fprintf(fp,"# waveform ID=%d\n",iwv);
+	fprintf(fp,"# ng=%d\n",ng);
+	fprintf(fp,"# index (i,j),  coordinate (x,y)\n");
+	for(int i=0;i<ng;i++){
+		//printf("(i,j)=(%d, %d) ",isrc[i],jsrc[i]);
+		x=Xa[0]+(isrc[i]+xofst)*dx[0];
+		y=Xa[1]+(jsrc[i]+yofst)*dx[1];
+		fprintf(fp,"%d, %d, %lf, %lf\n",isrc[i],jsrc[i],x,y);
+		//printf("(x,y)=(%lf, %lf)\n",x,y);
+	};
+
+	fclose(fp);
+};
 void TRNSDCR::fwrite(){
 	int i,j;
 	char fname[128];
@@ -127,6 +152,7 @@ void ARRAY::init(int nn, int nm){
 };
 void ARRAY::print(){
 	int k=0;
+	printf("nmeas=%d\n",nmeas);
 	for(int j=0;j<nmeas;j++){
 	for(int i=0;i<nele;i++){
 		printf("i=%d, actv=%d, a0=%lf, tdly=%lf\n",i,actv[k],a0[k], tdly[k]);

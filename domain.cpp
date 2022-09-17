@@ -61,7 +61,7 @@ void DOMAIN::fwrite(){
 	fprintf(fp," rho=%lf [g/cm3]\n",rho);
 	fprintf(fp," amu=%lf [GPa]\n",amu);
 	fclose(fp);
-	printf("Domain setting written to 'domain.out' \n");
+	printf(" --> domain.out\n");
 };
 void DOMAIN::init(int *nxy){
 	Ndiv=nxy;

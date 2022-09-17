@@ -48,6 +48,7 @@ class SOURCE{
 		void print();
 		int iwv;	// waveform number 
 		double Ctd;	// delay time gradient
+		double th_in;	// incident angle [deg]
 		bool Ton; // activated 
 		double *dx, *Xa;
 		//double dt;
@@ -67,6 +68,7 @@ class TRNSDCR: public SOURCE{
 		double amp_synth(int it);
 		void record(int it, double **fld);
 		void fwrite();
+		void fwrite_setting(char *fn, char *mode, int num);
 		double mean_amp(int i);
 		void clear();
 	private:
@@ -165,7 +167,8 @@ class CNTRL{
 		int nrec;
 		void setup_domain(char *fname);
 		void time_setting(char *fname);
-		void wvfm_setting(char *fname);
+		//void wvfm_setting(char *fname);
+		void wvfm_setting();
 		int src_setting(char *fname);
 		int rec_setting(char *fname);
 		void array_setting(char *fname);

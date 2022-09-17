@@ -61,7 +61,7 @@ void CNTRL::setup_domain(char *fname){
 	dm.PML_setup(gmm);
 
 	int i;
-	FILE *ftmp=fopen("log.txt","w");
+	FILE *ftmp=fopen("pml_val.out","w");
 	double tmp;
 	for(i=0; i<Ndiv[0]; i++){
 		tmp=Xa[0]+dx[0]*(i+0.5);
@@ -73,10 +73,12 @@ void CNTRL::setup_domain(char *fname){
 		fprintf(ftmp,"%lf, %lf\n",tmp,dm.PML_dcy(1,tmp));
 	}
 	fclose(ftmp);
+	printf(" -->pml_val.out\n");
 
 	dm.perfo_ellip(fname);
 	dm.topography(fname);
 	dm.out_kcell();		// write kcell data 
+	printf(" -->kcell.dat\n");
 	dm.fwrite();	// write domain setting
 	
 	// Setup staggered grid system 
@@ -111,6 +113,7 @@ void CNTRL::setup_domain(char *fname){
 	sprintf(name,"v3y"); v3y.fwrite_prms(fnf,md,name);
 	sprintf(name,"q1"); q1.fwrite_prms(fnf,md,name);
 	sprintf(name,"q2"); q2.fwrite_prms(fnf,md,name);
+	printf(" -->field_setting.dat\n");
 };
 
 bool CNTRL::out_time(int it){
@@ -129,7 +132,7 @@ void CNTRL::time_setting(char *fname){
 	fgets(cbff,128,fp);
 	fscanf(fp,"%lf, %d\n",&Tf, &Nt);
 	dt=Tf/(Nt-1);
-	printf("CFL=%lf\n",CNTRL::CFL());
+	printf(" CFL=%lf\n",CNTRL::CFL());
 
 	fgets(cbff,128,fp);
 	fscanf(fp,"%lf, %lf, %d\n",&tout_s, &tout_e, &Nout);
@@ -165,16 +168,31 @@ void CNTRL::time_setting(char *fname){
 	fprintf(fp,"iout_start=%d,(tout_start=%lf)\n",iout0, iout0*dt);
 	fprintf(fp,"ftyp=%d (I.C. type, currently only -1 is allowed)\n",ftyp);
 	fclose(fp);
-	printf("Temporal setting written to 'time_setting.out'\n");
+	printf(" -->time_setting.out\n");
 	
 };
-void CNTRL::wvfm_setting(char *fname){
-	wvs=(Wv1D *)malloc(sizeof(Wv1D)*nwv);
+//void CNTRL::wvfm_setting(char *fname){
+void CNTRL::wvfm_setting(){
+	char fname[128];
 
-	for(int i=0;i<nwv;i++){
+	int i,j;
+	wvs=(Wv1D *)malloc(sizeof(Wv1D)*nwv);
+	for(i=0;i<nwv;i++){
 		sprintf(fname,"inwv%d.dat",i);
 		wvs[i].gen_wv(fname);
 	}
+
+	FILE *fp=fopen("inwvs.out","w");
+	fprintf(fp,"# nwv, dt, Nt\n");
+	fprintf(fp,"%d, %lf, %d\n",nwv,wvs[0].dt, wvs[0].Nt);
+	for(i=0;i<nwv;i++){
+		fprintf(fp,"#iwv=%d\n",i);
+	for(j=0;j<wvs[i].Nt;j++){
+		fprintf(fp,"%lf\n",wvs[i].amp[j]);
+	}
+	}
+	fclose(fp);
+	printf(" -->inwvs.out\n");
 	
 	//char fnout[128];
 	//wv.FFT(1);
@@ -194,6 +212,9 @@ int CNTRL::src_setting(char *fname){
 	double xsrc,ysrc,ain;
 	int i0,i,j,i1,i2,j1,j2,ng;
 	int isrc,jsrc,isum;
+
+	char fout[128]="tr_elems.out";
+	char mode[6]="w";
 
 	fgets(cbff,128,fp);
 	fscanf(fp,"%d\n",&nsrc);
@@ -223,7 +244,6 @@ int CNTRL::src_setting(char *fname){
 				i0=int((xy-Xa[1])/dx[1]);
 				xy=Xa[1]+(i0+0.5)*dx[1];
 			};
-			printf("xy=%lf\n",xy);
 			j1=int((xy-w2-Xa[1])/dx[1]);
 			srcs[k].mem_alloc(ng);
 			for(j=0; j<ng; j++){
@@ -247,7 +267,6 @@ int CNTRL::src_setting(char *fname){
 				i0=int((xy-Xa[0])/dx[0]);
 				xy=Xa[0]+(i0+0.5)*dx[0];
 			};
-			printf("xy=%lf\n",xy);
 			i1=int((xy-w2-Xa[0])/dx[0]);
 			if(ng==0) ng=1;
 			srcs[k].mem_alloc(ng);
@@ -265,13 +284,15 @@ int CNTRL::src_setting(char *fname){
 			break;
 		};
 		ng=isum;
-		srcs[k].print();
+		//srcs[k].print();
+		srcs[k].fwrite_setting(fout,mode,k);
+		sprintf(mode,"a");
 		srcs[k].set_center();
 		srcs[k].init_bwv(Nt,dt);
 	}
 	nwv++;
-	printf("nwv=%d\n",nwv);
 	fclose(fp);
+	printf(" -->tr_elems.out\n");
 	return(nwv);
 };
 void CNTRL::array_setting(char *fname){
@@ -287,8 +308,6 @@ void CNTRL::array_setting(char *fname){
 		printf(" Error: nele(=%d) must be equal to nsrc(=%d) !\n",nele,nsrc);
 		exit(-1);
 	};
-	printf("nmeas=%d\n",nmeas);	
-
 	ary.init(nsrc,nmeas);
 	int i,j,k=0;
 	for(j=0;j<nmeas;j++){ 
@@ -299,7 +318,7 @@ void CNTRL::array_setting(char *fname){
 		};
 	};
 	round=0;
-	ary.print();
+	//ary.print();
 	fclose(fp);
 };
 /*

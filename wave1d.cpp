@@ -39,7 +39,6 @@ Wv1D::Wv1D(char *fname){
 };
 void Wv1D::gen_wv(char *fname){
 	awv.gen(fname);
-	awv.disp();
 	Nt=awv.Nt;
 	dt=awv.dt;
 	amp=awv.amp;

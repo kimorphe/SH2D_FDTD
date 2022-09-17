@@ -279,7 +279,6 @@ void FIELD::gen_indx0(int **kcell){
 			kbnd=(int *)malloc(sizeof(int)*Nbnd);
 		}
 	}
-	printf("Nin=%d Nbnd=%d Nex=%d\n",Nin,Nbnd,Nex);
 };
 void FIELD::clear(){
 	int i,j;
