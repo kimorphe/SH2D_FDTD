@@ -423,8 +423,9 @@ double CNTRL::CFL(){
 	double dh=dx[0];
 	double Crt;
 	if(dh >dx[1]) dh=dx[1];
-	dh=sqrt(dx[0]*dx[0]+dx[1]*dx[1]);
-	Crt=ct*dt/dh;
+	Crt=ct*dt/dh*sqrt(2.0);
+	//dh=sqrt(dx[0]*dx[0]+dx[1]*dx[1]);
+	//Crt=ct*dt/dh;
 	if(Crt>1.0){
 		printf(" stability condition is not satisfied !!\n --> abort proces\n");
 		exit(-1);
