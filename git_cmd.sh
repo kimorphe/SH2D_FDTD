@@ -1,6 +1,8 @@
 git add git_cmd.sh
 git add *.html
 
+git add domain.ods
+
 git add *.h
 git add *.cpp
 git add makefile
@@ -16,6 +18,7 @@ git add Demo1/*.sh
 git add Demo1/*.html
 
 git add Qt/*.py
+
 
 git commit
 git push -u origin master
