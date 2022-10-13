@@ -23,7 +23,7 @@ class FIELD{
 		void l2ij(int l, int *ix, int *jy);
 		double  ofst[2];
 		void fwrite(int d_num, int num);
-		void fwrite_trim(int d_num, int num, int *NHa, int *NHb);
+		void fwrite_trim(int d_num, int num, int *NHa, int *NHb, double tout);
 		void set_IC(double xc, double yc, double sig, double f0);
 		void print_prms();
 		void gen_indx0(int **kcell);
@@ -180,7 +180,7 @@ class CNTRL{
 		void capture(int ii);
 		void clear();
 		void fwrite_ary();
-		void snapshot(int meas, int isum);
+		void snapshot(int meas, int isum,int it);
 	private:
 };
 double pwfun(

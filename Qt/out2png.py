@@ -1,3 +1,4 @@
+#! /home/kazushi/anaconda3/bin/python
 import sys
 from PyQt5.QtWidgets import (
     QApplication, 
@@ -54,8 +55,8 @@ class MainWindow(QMainWindow):
         layout1.addWidget(btn1)
         layout1.addWidget(btn2)
 
-        ledit1=QLineEdit("-0.2")
-        ledit2=QLineEdit("0.2")
+        ledit1=QLineEdit("-0.15")
+        ledit2=QLineEdit("0.15")
         lbl1=QLabel("min.")
         lbl2=QLabel("max.")
         layout2.addWidget(lbl1)
@@ -142,7 +143,7 @@ class MainWindow(QMainWindow):
         self.edit.append(" Generating PNG files.... ")
         fig=plt.figure()
         ax=fig.add_subplot(111)
-        ax.grid(True)
+        #ax.grid(True)
         v3=FLD()
         k=0
         for fn in prms.fnames:
@@ -153,8 +154,12 @@ class MainWindow(QMainWindow):
                 divider=make_axes_locatable(ax)
                 cax=divider.append_axes("right",size="5%",pad=0.05)
                 plt.colorbar(im,cax=cax)
+                ax.set_xlabel(r"$\it{x}$[mm]",fontsize=14)
+                ax.set_ylabel(r"$\it{y}$[mm]",fontsize=14)
             else:
                 im.set_data(v3.Z)
+            stime="time={:6.2f}[micro sec]".format(v3.time)
+            ax.set_title(stime,loc="right")
             fout=fn.replace("out","png")
             fig.savefig(fout,bbox_inches="tight")
             k+=1
@@ -162,6 +167,11 @@ class MainWindow(QMainWindow):
 
 
 if __name__=="__main__":
+    plt.rcParams["font.family"]="serif"
+    plt.rcParams["font.serif"]=["Time New Roman"]+plt.rcParams["font.serif"]
+    plt.rcParams["mathtext.fontset"]="stix"
+    plt.rcParams["font.size"]=12
+    #plt.rcParams["text.usetex"]=False
     app=QApplication(sys.argv)
     win=MainWindow()
     win.show()

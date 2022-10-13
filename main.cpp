@@ -26,13 +26,13 @@ int main(int argc, char *argv[]){
 	for(m=0;m<ctr.ary.nmeas;m++){
 		printf("m=%d\n",m);
 		isum=0;
-		ctr.snapshot(m,isum++);
+		ctr.snapshot(m,isum++,0);
 	for(it=0; it<ctr.Nt; it++){
 		ctr.v2q(it); 
 		ctr.q2v(it);
 //		ctr.record(it);
 		ctr.capture(it);
-		if(ctr.out_time(it)) ctr.snapshot(m,isum++);
+		if(ctr.out_time(it)) ctr.snapshot(m,isum++,it);
 	};
 		//for(int i=0; i<ctr.nrec; i++) ctr.recs[i].fwrite();
 		ctr.fwrite_ary();

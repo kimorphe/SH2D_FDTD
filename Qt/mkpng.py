@@ -21,6 +21,8 @@ class FLD:
         fp=open(fname,"r")
 
         cmt=fp.readline()
+        time=float(fp.readline())
+        cmt=fp.readline()
         dat=fp.readline().strip().split(",");
         x=float(dat[0]); y=float(dat[1])
         Xa=[x,y]
@@ -45,13 +47,14 @@ class FLD:
         self.Z=np.transpose(Z)
         self.Xa=np.array(Xa)
         self.Xb=np.array(Xb)
+        self.time=time
         fp.close()
     def show(self,ax,vmin=-0.2, vmax=0.2, cmap="jet",interpolation="none"):
         Xb=self.Xb;
         Xa=self.Xa;
         ext=[Xa[0],Xb[0],Xa[1],Xb[1]]
         im=ax.imshow(self.Z,aspect=1.0,extent=ext,cmap=cmap,origin="lower",vmin=vmin,vmax=vmax, interpolation=interpolation)
-        ax.grid(True)
+        #ax.grid(True)
         return(im)
 
 if __name__=="__main__":

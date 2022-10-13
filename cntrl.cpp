@@ -573,6 +573,6 @@ void CNTRL::fwrite_ary(){
 	};
 	fclose(fp);
 };
-void CNTRL::snapshot(int n_meas, int isum){
-	v3.fwrite_trim(n_meas,isum,NHa,NHb);
+void CNTRL::snapshot(int n_meas, int isum, int it){
+	v3.fwrite_trim(n_meas,isum,NHa,NHb,it*dt);
 };

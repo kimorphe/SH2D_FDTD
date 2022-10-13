@@ -4,7 +4,7 @@
 #include"wveq2d.h"
 
 //--------------------------------------------------------------------------
-void FIELD::fwrite_trim(int d_num, int num, int *NHa, int *NHb){
+void FIELD::fwrite_trim(int d_num, int num, int *NHa, int *NHb, double tout){
 	char fname[128];
 	if(type==0) sprintf(fname,"T%d/v3_%d.out",d_num,num);
 	if(type==1) sprintf(fname,"T%d/q1_%d.out",d_num,num);
@@ -20,6 +20,8 @@ void FIELD::fwrite_trim(int d_num, int num, int *NHa, int *NHb){
 		ngs[i]=Ng[i]-NHa[i]-NHb[i];
 	}
 
+	fprintf(fp,"# time\n");
+	fprintf(fp,"%lf\n",tout);
 	fprintf(fp,"# Xa[0:1]\n");
 	fprintf(fp,"%lf, %lf\n",xll[0],xll[1]);
 

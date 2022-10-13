@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
         Vlayout.addWidget(dsply)
 
         lbl=QLabel("Frame Rate")
-        ledt=QLineEdit("5")
+        ledt=QLineEdit("10")
         ledt.setAlignment(QtCore.Qt.AlignCenter)
 
         lbl2=QLabel("Write to=")
@@ -71,7 +71,7 @@ class MainWindow(QMainWindow):
         frt=self.ledt.text()
         fn=self.ledt2.text()
 
-        fout=fn+".mp4"
+        fout=self.dir_name+"/"+fn+".mp4"
         #cmd=["ffmpeg","-r",frt,"-i",path,"-vcodec","h264",fout]
         opt1=["-vcodec", "h264", "-y"]
         opt2=["-pix_fmt", "yuv420p", "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2"]
