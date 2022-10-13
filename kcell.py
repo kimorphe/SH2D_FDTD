@@ -41,8 +41,8 @@ class KCELL:
         Xa=self.Xa;
         Xb=self.Xb;
         ext=[Xa[0],Xb[0],Xa[1],Xb[1]]
-        ax.imshow(self.Z,aspect=1.0,extent=ext,cmap="jet",origin="lower")
-        ax.grid(True)
+        ax.imshow(self.Z,aspect=1.0,extent=ext,cmap="gray",origin="lower",vmin=-1.0,vmax=1)
+        #ax.grid(True)
 
 if __name__=="__main__":
     K=KCELL()
