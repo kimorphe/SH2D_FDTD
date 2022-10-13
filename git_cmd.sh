@@ -7,15 +7,16 @@ git add *.h
 git add *.cpp
 git add makefile
 git add *.py
+git add *.sh
 
 git add *.inp
 git add inwv0.dat
 
-git add Demo1/*.inp
-git add Demo1/inwv0.dat
-git add Demo1/*.txt
-git add Demo1/*.sh
-git add Demo1/*.html
+git add Demo*/*.inp
+git add Demo*/inwv0.dat
+git add Demo*/*.txt
+git add Demo*/*.html
+#git add Demo1/*.sh
 
 git add Qt/*.py
 
