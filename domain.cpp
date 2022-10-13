@@ -115,6 +115,44 @@ void DOMAIN::perfo_ellip(char *fname){
 	};
 	fclose(fp);
 };
+void DOMAIN::slit(char *fname){
+	int i,j;
+	double xs[2],xe[2],xc[2],wx,wy;
+	int ixs[2],ixe[2];
+
+	FILE *fp;
+	char cbff[7];
+	fp=fopen(fname,"r");
+	if(fp==NULL) show_msg(fname); 
+	i=0;
+	while(fgets(cbff,7,fp) !=NULL){
+		if(strcmp(cbff,"##Rect")==0){
+			printf("Flag ##Rect found !!\n");
+			fscanf(fp,"%lf, %lf\n",xc,xc+1); // center
+			fscanf(fp,"%lf, %lf\n",&wx,&wy); // width and height
+			//fscanf(fp,"%lf, %lf\n",xs,xs+1);
+			//fscanf(fp,"%lf, %lf\n",xe,xe+1);
+			xs[0]=xc[0]-0.5*wx;
+			xe[0]=xc[0]+0.5*wx;
+			xs[1]=xc[1]-0.5*wy;
+			xe[1]=xc[1]+0.5*wy;
+
+			for(i=0;i<2;i++){
+				ixs[i]=floor((xs[i]-Xa[i])/dx[i]);
+				ixe[i]=floor((xe[i]-Xa[i])/dx[i]);
+				if( ixs[i] <0) ixs[i]=0;
+				if( ixe[i] >= Ndiv[i]) ixe[i]=Ndiv[i]-1;
+			}
+
+			for(i=ixs[0]; i<=ixe[0]; i++){
+			for(j=ixs[1]; j<=ixe[1]; j++){
+				 kcell[i][j]=1;
+			}
+			}
+		}
+	};
+	fclose(fp);
+}
 //-------------EXPORT GEOMETRY DATA  ------------------
 void DOMAIN:: out_kcell(){
 

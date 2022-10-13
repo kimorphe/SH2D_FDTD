@@ -76,6 +76,7 @@ void CNTRL::setup_domain(char *fname){
 	printf(" -->pml_val.out\n");
 
 	dm.perfo_ellip(fname);
+	dm.slit(fname);
 	dm.topography(fname);
 	dm.out_kcell();		// write kcell data 
 	printf(" -->kcell.dat\n");
@@ -424,6 +425,9 @@ double CNTRL::CFL(){
 	double Crt;
 	if(dh >dx[1]) dh=dx[1];
 	Crt=ct*dt/dh*sqrt(2.0);
+	//printf("dt=%lf, dx=%lf, %lf, ct=%lf\n",dt,dx[0],dx[1],ct);
+	//printf("Crt=%lf\n",Crt);
+	//exit(-1);
 	//dh=sqrt(dx[0]*dx[0]+dx[1]*dx[1]);
 	//Crt=ct*dt/dh;
 	if(Crt>1.0){
