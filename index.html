@@ -44,6 +44,12 @@
 		<ul>
 		<li> T{0-}/v3_*.out: v3-field (snapshot)</li>
 		<li> ary*.out: array-measured temporal waveforms</li>
+		<li> MP4 movie 
+			<video controls="">
+				<source src="V3.mp4" type="video/mp4">
+		</video>
+		</li>
+		<li><video src="T1_v3.mp4" controls></video></li>
 		</ul>
 	<li>Python Codes: </li>
 		<ul>
@@ -52,10 +58,11 @@
 			<li><a href="./bscan.py">bscan.py</a>: <-- ary*.out </li>
 			<li><a href="./data_dir.py">data_dir.py</a>: --> T* </li>
 			<li><a href="./mkpng.py">mkpng.py</a> v3_{*}.out --> v3_{*}.png (with OpenFileDialog)</li>
-			<li><a href="./Qt/app1.py">Qt/app1.py</a> PNG snapshot generator 
+			<li><a href="./Qt/out2png.py">Qt/out2png.py</a> PNG snapshot generator(旧app1.py) 
 				(Qt application, <a href="Qt/mkpng.py">Qt/mkpng.py</a> required)</li>
 			<li><a href="Qt/qmpl.py">Qt/qmpl.py</a>canvasにmatplotlibグラフを表示するためのサンプルプログラム </li>
 			<li><a href="Qt/ascans.py">Qt/ascans.py</a>A-scan表示するためのQt application</li>
+			<li><a href="Qt/png2mp4.py">Qt/png2mpy.py</a>連番pngファイルv3_%d.pngからmp4 movieを作成</li>
 		</ul>
 	<li>Auxillary programs:</li>
 		<ul>
@@ -65,9 +72,10 @@
 		<ul>
 			FFT: original waveform class and fft program 
 		</ul>
-	<li>入力データ作成補助
+	<li>入/出力データ作成補助
 		<ul>
-			分割数設定のための計算表<a href="domain.ods">domain.ods</a>
+			<li> 分割数設定のための計算表<a href="domain.ods">domain.ods</a> </li>
+			<li> ffmpegによる動画作成(shell scriptのsample)<a href="Qt/fmpg.sh">(script)</a></li>
 		</ul>
 	</li>
 	</ul>
@@ -170,6 +178,17 @@
 		<li> 9/14(Wed.)<br>
 		A-scan波形表示のQt application (file名設定, canvasへの波形表示, clear, channel選択まで概ね完成)	
 		</li>
+		<li> 10/12(Wed.)<br>
+			時間、空間分割幅設定のための計算表(domain.ods)を作成<br>
+			Courant数の計算、誤りを修正(cntrl.cpp)<br>
+			矩形領域くり抜きのためのmethodを追加(DOMAIN::slit)<br>
+		</li>
+		<li> 10/13(Thr.)<br>
+			ffmpegによる動画作成(fmpg.sh)でコマンドを実行．<br>
+			<s>Qt applicationからもこのシェルスクリプトをsubprocessモジュールを使って呼び出す(残念ながら..)</s><br>
+			subprocess.run(cmmand)でcommandをリスト形式で渡せば大丈夫なことが判明<br>
+			ffmpegによるmp4 movie作成：firefoxで表示できず解決にかなり苦労した(stack overflowが役立った)．
+		</li>
 	</ul>
 <h2>開発項目:</h2>
 	<ol>
@@ -215,8 +234,8 @@
 			Libreofficeをコマンドラインから使用する方法</a>
 		</li>
 		<li>
-			<a href="https://qiita.com/livlea/items/a94df4667c0eb37d859f">
-				連番pngファイルからの動画生成(FFmpeg)</a>	
+			連番pngファイルからの動画生成(FFmpeg)
+			<a href="https://qiita.com/cha84rakanal/items/e84fe4eb6fbe2ae13fd8">(Link)</a>
 		</li>
 		<li>
 			<a href="https://mori-memo.hateblo.jp/entry/2022/02/19/135441">
