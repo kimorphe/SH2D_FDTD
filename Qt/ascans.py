@@ -24,6 +24,7 @@ class MplCanvas(FigureCanvasQTAgg):
         fig=plt.figure(figsize=(width,height),dpi=dpi)
         self.axes=fig.add_subplot(111)
         super(MplCanvas, self).__init__(fig)
+        self.fig=fig
 
 class WVs:
     def load(self,fname):
@@ -67,23 +68,29 @@ class WVs:
     def Aplots(self, ax):
         for k in range(self.nele):
             ax.plot(self.time, self.amp[k,:])
+        ax.grid(True)
     def Aplot(self, ax,num):
         ax.plot(self.time, self.amp[num,:])
+        ax.grid(True)
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        plt.rcParams["font.size"]=12
 
         btn1=QPushButton("select directory") 
         btn1.clicked.connect(self.select_dir)
         canvas=MplCanvas(self,width=8,height=3, dpi=100)
         toolbar=NavigationToolbar(canvas,self)
 
+        canvas.axes.set_xlabel("time [micro sec]")
+        canvas.axes.set_ylabel("echo height[arb. unit]")
+        canvas.fig.tight_layout()
+
         layout=QVBoxLayout()
-        layout.addWidget(btn1)
         layout.addWidget(toolbar)
         layout.addWidget(canvas)
-
         layout2=QHBoxLayout()
         spbT=QSpinBox(); 
         spbT.setRange(1,1); 
@@ -116,6 +123,16 @@ class MainWindow(QMainWindow):
 
         layout.addLayout(layout2)
 
+        btn4=QPushButton("export")
+        btn4.clicked.connect(self.select_fout)
+
+        layout3=QHBoxLayout()
+        layout3.addWidget(btn1)
+        layout3.addWidget(btn4)
+
+        #layout.addWidget(btn1)
+        layout.addLayout(layout3)
+
         wgt=QWidget()
         wgt.setLayout(layout)
         self.setCentralWidget(wgt)
@@ -142,6 +159,10 @@ class MainWindow(QMainWindow):
             self.canvas.axes.set_ylim(ylim)
 
         self.canvas.draw() 
+
+    def select_fout(self):
+        fout,filt=QFileDialog.getSaveFileName(self,"select save file","./","*.png")
+        self.canvas.fig.savefig(fout,bbox_inches="tight")
 
     def select_dir(self):
         dir_name=QFileDialog.getExistingDirectory(self,"Select Directory","./",QFileDialog.ShowDirsOnly)

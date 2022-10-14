@@ -33,7 +33,7 @@ if __name__=="__main__":
 
     plt.rcParams['font.family'] = 'serif'
     plt.rcParams['font.serif'] = ['Times New Roman'] + plt.rcParams['font.serif']
-    plt.rcParams['text.usetex']==False
+    #plt.rcParams['text.usetex']=False
     plt.rcParams['mathtext.fontset']='stix'
     plt.rcParams['font.size']=12
 

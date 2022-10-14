@@ -23,8 +23,8 @@ class ImgPrms:
     def __init__(self):
         self.nfile=0
         self.fnames=[]
-        self.cmap="none"
-        self.intpl="none"
+        self.cmap="jet"
+        self.intpl="bilinear"
         self.vmin=0.0
         self.vmax=1.0
     def show(self):
@@ -68,7 +68,7 @@ class MainWindow(QMainWindow):
         cbox1=QComboBox()
         cbox2=QComboBox()
         cbox1.addItems(["jet","gray","gist_rainbow","ocean","nipy_spectral"])
-        cbox2.addItems(["none","bilinear","bicubic","gaussian","spline16"])
+        cbox2.addItems(["bilinear","bicubic","gaussian","spline16","none"])
         layout3.addWidget(cbox1)
         layout3.addWidget(cbox2)
 
@@ -158,8 +158,8 @@ class MainWindow(QMainWindow):
                 ax.set_ylabel(r"$\it{y}$[mm]",fontsize=14)
             else:
                 im.set_data(v3.Z)
-            stime="time={:6.2f}[micro sec]".format(v3.time)
-            ax.set_title(stime,loc="right")
+            stime=r"$t$={:6.2f}[micro sec]".format(v3.time)
+            ax.set_title(stime,loc="center")
             fout=fn.replace("out","png")
             fig.savefig(fout,bbox_inches="tight")
             k+=1
