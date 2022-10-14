@@ -82,6 +82,7 @@ class MainWindow(QMainWindow):
         self.dsply.append("Running ffmpeg ...\n")
         self.dsply.append(" Frame rate= "+frt)
         subprocess.run(cmd,text=True)
+
         self.dsply.append(" MP4 movie "+fout+" created")
 
     def select_directory(self):
