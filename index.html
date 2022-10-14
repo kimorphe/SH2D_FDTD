@@ -62,7 +62,7 @@
 				(Qt application, <a href="Qt/mkpng.py">Qt/mkpng.py</a> required)</li>
 			<li><a href="Qt/qmpl.py">Qt/qmpl.py</a>canvasにmatplotlibグラフを表示するためのサンプルプログラム </li>
 			<li><a href="Qt/ascans.py">Qt/ascans.py</a>A-scan表示するためのQt application</li>
-			<li><a href="Qt/png2mp4.py">Qt/png2mpy.py</a>連番pngファイルv3_%d.pngからmp4 movieを作成</li>
+			<li><a href="Qt/png2mp4.py">Qt/png2mp4.py</a>連番pngファイルv3_%d.pngからmp4 movieを作成</li>
 		</ul>
 	<li>Auxillary programs:</li>
 		<ul>
@@ -188,6 +188,21 @@
 			<s>Qt applicationからもこのシェルスクリプトをsubprocessモジュールを使って呼び出す(残念ながら..)</s><br>
 			subprocess.run(cmmand)でcommandをリスト形式で渡せば大丈夫なことが判明<br>
 			ffmpegによるmp4 movie作成：firefoxで表示できず解決にかなり苦労した(stack overflowが役立った)．
+		</li>
+		<li> 10/14(Fri.)<br>
+			Qt/png2mp4.pyのトラブル:
+			<ul>
+				<li>Desktopでは動作するもLaptopでh264エンコーダが無いとのエラー</li>
+				<li>ffmpegがAnacondの仮想環境にインストールされていることが原因の模様
+				(/home/kazushi/anaconda3/bin/ffmpegにパスが設定されていしまっている)</li>
+				<li>
+				あらたにffmpegをインストールし直し(apt-getで),/usr/bin/ffmpegをfull pathで
+				呼ぶことで解決
+				</li>
+				<li>
+				ただし、一部python module, subprocessのオプション(text=True)が機能しない(原因不明)
+				</li>
+			</ul>
 		</li>
 	</ul>
 <h2>開発項目:</h2>

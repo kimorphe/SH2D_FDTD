@@ -75,13 +75,14 @@ class MainWindow(QMainWindow):
         #cmd=["ffmpeg","-r",frt,"-i",path,"-vcodec","h264",fout]
         opt1=["-vcodec", "h264", "-y"]
         opt2=["-pix_fmt", "yuv420p", "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2"]
-        cmd=["ffmpeg","-r",frt,"-i",path]+opt1+opt2+[fout]
+        cmd=["/usr/bin/ffmpeg","-r",frt,"-i",path]+opt1+opt2+[fout]
         print(cmd)
         #ffmpeg -r 5 -i v3_%d.png -vcodec h264 -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" out.mp4
 
         self.dsply.append("Running ffmpeg ...\n")
         self.dsply.append(" Frame rate= "+frt)
-        subprocess.run(cmd,text=True)
+        #subprocess.run(cmd,text=True)
+        subprocess.run(cmd)
 
         self.dsply.append(" MP4 movie "+fout+" created")
 
