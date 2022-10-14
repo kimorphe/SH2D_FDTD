@@ -16,6 +16,7 @@ git add Demo*/*.inp
 git add Demo*/inwv0.dat
 git add Demo*/*.txt
 git add Demo*/*.html
+git add Demo*/Figs/*
 #git add Demo1/*.sh
 
 git add Qt/*.py
