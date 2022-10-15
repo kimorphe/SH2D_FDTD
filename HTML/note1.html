@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<title>一般的な注意</title>
+	<meta name="keywords" content="ultrasonic testing,FDTD,wave" />
+	<meta name="description" content="ページの説明" />
+	<link rel="stylesheet" href="style2.css" type="text/css" />
+	<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"}}});
+	</script>
+	<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML,/www_func/MathJax/MyConfig.js">
+	</script>
+</head>
+
+<body>
+
+<div id="outer">
+<div id="main">
+
+<!-- メイン(左)パネル -->
+<div class="main-inner">
+<h1>数値シミュレーションに関する一般的注意</h1>
+<h2>仮想現実としての数値シミュレーション</h2>
+<p>
+この教材ではFDTD法(finite-difference time-domain)と
+呼ばれる方法を使って行った数値シミュレーション結果を
+利用している．数値シミュレーションは，人間の五感で
+捉えることのできない現象を視覚的に表示してくれるという
+点で現象の理解に非常に有用となる．
+しかしながら，シミュレーションはあくまで仮想現実である
+ため，シミュレーション結果の解釈や利用は常に慎重に
+行う必要がある．特に以下の点には十分に配慮した上で
+数値シミュレーションを利用する必要がある．
+</p>
+<ul>
+        <li>数値シミュレーションは必ず誤差を伴う．</li>
+        <li>誤差には計算誤差だけでなくモデル化の誤差も含まれる．</li>
+        <li>例えば，弾性係数などの物性値も真の値は知りようがなく，本来は必ずばらつきがある．</li>
+        <li>多くの有用なシミュレーションには膨大な計算が必要とされる．
+	原理的にはシミュレーション可能な問題でも，計算量の面で事実上実施困難なものは多い．</li>
+        <li> 数値シミュレーション結果をどのように解釈するかは知識と経験が必要となる．
+	また，知りたいことが直接シミュレーション結果として与えられるとは限らない．</li>
+        <li>
+	超音波探傷試験のシミュレーション結果は，データサイズが通常非常に大きい．
+	結果のどこに着目すべきかは必ずしも明らかでなく，シミュレーション結果を更に
+	処理した上で解釈が可能となるケースも多い．
+	</li>
+        <li>既存のプログラムを使用しても，入力データの作成ミスは非常に起きやすい．
+	意外な結果が得られた場合には，入力データを含め使用方法の誤りが無いか
+	確認する必要がある．
+	</li>
+</ul>
+</div>
+
+<!-- ############    右パネル   ############# -->
+</div>
+<div id="right">
+	<div class="side-title">Related Topics</div>
+
+<div class="side">
+<ul>
+	<li>超音波
+	<a href="https://en.wikipedia.org/wiki/Ultrasound#Definition" target="blank">(外部サイト)</a>
+	</li>
+	<li>端部エコー法(斜角入射)</li>
+</ul>
+</div>
+</div>
+	<div id="footer">© 2022 KK</div>
+</div>
+
+<!-- ############  END 右パネル########## -->
+</body>
+</html>
+

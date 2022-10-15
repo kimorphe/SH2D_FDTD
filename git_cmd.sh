@@ -21,6 +21,8 @@ git add Demo*/Figs/*
 
 git add Qt/*.py
 
+git add HTML/*
+
 
 git commit
 git push -u origin master
