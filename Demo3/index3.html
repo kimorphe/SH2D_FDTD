@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<title>位相速度</title>
+	<meta name="keywords" content="ultrasonic testing,FDTD,wave" />
+	<meta name="description" content="ページの説明" />
+	<link rel="stylesheet" href="../HTML/style2.css" type="text/css" />
+	<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"}}});
+	</script>
+	<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML,/www_func/MathJax/MyConfig.js">
+	</script>
+</head>
+
+<body>
+
+<div id="outer">
+<div id="main">
+
+<!-- メイン(左)パネル -->
+<div class="main-inner">
+<h1>超音波の伝播速度</h1>
+<h2>密度，弾性係数との関係</h2>
+<p>
+固体内部を伝わる縦波(P波)と横波(S波)の速度は，物体の質量密度と弾性係数で決まる．
+P波とS波の速度をそれぞれ\(c_P, c_S\)，物体の質量密度を\(\rho\)，
+ラメ定数を\(\lambda\)および\( \mu\)とすれば，
+\begin{align}
+	c_P=\sqrt{ \frac{\lambda + 2\mu}{\rho}} \label{cP}\\ 
+	c_S=\left( \frac{\mu}{\rho}\right)^{1/2} \label{cS} 
+\end{align}
+の関係があることが知られている．
+ラメ定数はヤング率\(E\)，せん断剛性\(G\)，ポアソン比\(\nu\)から
+次の式で計算することができる．
+\begin{equation}
+	\lambda=, \ \ \mu=G
+\end{equation}
+</p>
+<!-- \eqref{cP}は正弦関数，\eqref{cS}は余弦関数の定義です．-->
+<!-- END OF MAIN BODY -->
+</div>
+</div>
+<!-- ############    右パネル   ############# -->
+<div id="right">
+	<div class="side-title">Related Topics</div>
+
+<div class="side">
+<ul>
+	<li>超音波とは
+	<a href="https://en.wikipedia.org/wiki/Ultrasound#Definition" target="blank">(外部サイト)</a>
+	</li>
+</ul>
+</div>
+</div>
+	<div id="footer">© 2022 KK</div>
+</div>
+
+<!-- ############  END 右パネル########## -->
+</body>
+</html>
+
