@@ -55,7 +55,7 @@ void CNTRL::setup_domain(char *fname){
 	dm.NHa=NHa;
 	dm.NHb=NHb;
 
-	double gmm=1.e-04;	// expected decay 
+	double gmm=1.e-05;	// expected decay 
 	dm.Ha=Ha;
 	dm.Hb=Hb;
 	dm.PML_setup(gmm);
@@ -131,8 +131,14 @@ void CNTRL::time_setting(char *fname){
 	if(fp==NULL) show_msg(fname);
 
 	fgets(cbff,128,fp);
-	fscanf(fp,"%lf, %d\n",&Tf, &Nt);
-	dt=Tf/(Nt-1);
+	//fscanf(fp,"%lf, %d\n",&Tf, &Nt);
+	//dt=Tf/(Nt-1);
+	fscanf(fp,"%lf, %lf\n",&Tf, &dt);
+	Nt=int(Tf/dt)+1;
+	Tf=(Nt-1)*dt;
+	//printf("Nt=%d, Tf=%lf\n",Nt,Tf);
+	//exit(-1);
+
 	printf(" CFL=%lf\n",CNTRL::CFL());
 
 	fgets(cbff,128,fp);
@@ -431,7 +437,7 @@ double CNTRL::CFL(){
 	//dh=sqrt(dx[0]*dx[0]+dx[1]*dx[1]);
 	//Crt=ct*dt/dh;
 	if(Crt>1.0){
-		printf(" stability condition is not satisfied !!\n --> abort proces\n");
+		printf(" stability condition is not satisfied (CFL=%lf)!!\n --> abort proces\n",Crt);
 		exit(-1);
 	};
 	return(Crt);
@@ -457,6 +463,7 @@ void CNTRL::q2v(int itime){
 		gmm=dt/(rho*dx[0]);
 		dFx=(F1[i+1][j]-F1[i][j])*gmm;
 		v3x.F[i][j]=((1.-beta)*v3x.F[i][j]+dFx)/(1.+beta);
+		//printf("dcy=%lf, xcod=%lf\n",(1.-beta)/(1.+beta),xcod[0]);
 
 		beta=0.5*dt*dm.PML_dcy(1,xcod[1]);
 		gmm=dt/(rho*dx[1]);

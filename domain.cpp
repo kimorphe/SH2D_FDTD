@@ -321,13 +321,15 @@ void DOMAIN::PML_setup(double gmm){
 	int m=2;
 	double eps=1.e-10;
 	for(int i=0; i<2; i++){
-		L=2.*Ha[i];
+		//L=2.*Ha[i];
+		L=Ha[i];
 		A0[i]=0.0; 
-		if(L>eps) A0[i]=-(m+1)*ct/pow(L,m+1)*logf(gmm);
+		if(L>eps) A0[i]=-0.5*(m+1)*ct/pow(L,m+1)*logf(gmm);
 
-		L=2.*Hb[i];
+		//L=2.*Hb[i];
+		L=Hb[i];
 		B0[i]=0.0; 
-		if(L>eps) B0[i]=-(m+1)*ct/pow(L,m+1)*logf(gmm);
+		if(L>eps) B0[i]=-0.5*(m+1)*ct/pow(L,m+1)*logf(gmm);
 	};
 };
 double DOMAIN::PML_dcy(int idir, double xy){ // direction: idir=0(x), 1(y)
