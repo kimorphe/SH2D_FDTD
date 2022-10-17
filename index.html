@@ -63,6 +63,8 @@
 			<li><a href="Qt/qmpl.py">Qt/qmpl.py</a>canvasにmatplotlibグラフを表示するためのサンプルプログラム </li>
 			<li><a href="Qt/ascans.py">Qt/ascans.py</a>A-scan表示するためのQt application</li>
 			<li><a href="Qt/png2mp4.py">Qt/png2mp4.py</a>連番pngファイルv3_%d.pngからmp4 movieを作成</li>
+			<li><a href="Qt/draw_prof.py">Qt/draw_prof.py</a>境界上の節点データからモデルの輪郭を描画</li>
+			<li><a href="model.py">model.py</a>FD計算モデルを表示.センサー位置が示される</li>
 		</ul>
 	<li>Auxillary programs:</li>
 		<ul>
@@ -207,6 +209,16 @@
 		<li> 10/16(Sun.)<br>
 			PMLパラメータの計算方法に誤りを発見、修正<br>
 			tset.inp(Ntでなく時間刻みを設定するように入力部を修正)
+		</li>
+		<li> 10/16(Sun.)<br>
+			Demo5作成(突き合わせ継手上面のみ形状をモデル化)<br>
+			FDTDプログラム修正(境界点の出力--> q1bnd.dat, q2bnd.dat,
+			Qt/draw_prof.pyで可視化）</br>
+			Qt/out2png.pyで輪郭線が描画されるように修正(処理が遅いので改良が必要)<br>
+			STLデータからの断面profile抽出(突き合わせ継手表面データにのみ利用可能)<br>
+			STLデータと処理コードの置き場、githubへの登録方法を検討(STLデータはサイズが大きい)<br>
+			各種の描画python scriptは配色や描画範囲など改良の上、統一が必要<br>
+			HTML documentもfolder構成,命名規則の設定を再検討すること<br>
 		</li>
 	</ul>
 <h2>開発項目:</h2>

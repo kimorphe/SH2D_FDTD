@@ -55,6 +55,9 @@ class FLD:
         ext=[Xa[0],Xb[0],Xa[1],Xb[1]]
         im=ax.imshow(self.Z,aspect=1.0,extent=ext,cmap=cmap,origin="lower",vmin=vmin,vmax=vmax, interpolation=interpolation)
         #ax.grid(True)
+        ax.set_xlim([Xa[0],Xb[0]])
+        ax.set_ylim([Xa[1]-10,Xb[1]+10])
+        ax.set_facecolor("k")
         return(im)
 
 if __name__=="__main__":

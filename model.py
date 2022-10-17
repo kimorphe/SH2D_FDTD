@@ -44,7 +44,7 @@ if __name__=="__main__":
     fname="kcell.dat"
     fig=plt.figure()
     ax=fig.add_subplot(111)
-    ax.set_facecolor("k")
+    #ax.set_facecolor("k")
     fsz=14
     #ax.tick_params(labelsize=fsz)
     ax.set_xlabel(r'$x$[mm]',fontsize=fsz)
@@ -53,7 +53,7 @@ if __name__=="__main__":
     K.show(ax)
 
     tr.draw(ax)
-    ax.set_ylim([-5,50])
+    #ax.set_ylim([-5,50])
     
 
     fname="model.png"

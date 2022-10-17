@@ -115,6 +115,12 @@ void CNTRL::setup_domain(char *fname){
 	sprintf(name,"q1"); q1.fwrite_prms(fnf,md,name);
 	sprintf(name,"q2"); q2.fwrite_prms(fnf,md,name);
 	printf(" -->field_setting.dat\n");
+	sprintf(fnf,"q1bnd.dat"); 
+	q1.fwrite_bnd(fnf);
+	sprintf(fnf,"q2bnd.dat"); 
+	q2.fwrite_bnd(fnf);
+	printf(" | -->q1bnd.dat\n");
+	printf(" | -->q2bnd.dat\n");
 };
 
 bool CNTRL::out_time(int it){

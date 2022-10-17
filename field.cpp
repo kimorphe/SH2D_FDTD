@@ -288,3 +288,17 @@ void FIELD::clear(){
 		for(j=0;j<Ng[1];j++) F[i][j]=0.0;
 	};
 };
+
+
+void FIELD::fwrite_bnd(char *fname){
+	FILE *fp=fopen(fname,"w");
+	if(fp==NULL) show_msg(fname);
+
+	int k,i,j;
+	for(k=0; k<Nbnd; k++){
+		l2ij(abs(kbnd[k]),&i,&j);
+		ij2xf(i,j);
+		fprintf(fp,"%lf, %lf\n",xf[0],xf[1]);
+	}
+	fclose(fp);
+};

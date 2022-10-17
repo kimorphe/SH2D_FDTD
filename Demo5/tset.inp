@@ -1,0 +1,11 @@
+# Trng, dt
+ 40.0, 0.035
+# tout_s, tout_e, nout (output control: time window & steps)
+  0.0, 30.0, 80
+# Initial Condition 
+# field type(0:v3, 1:q1, 2:q2)
+ -1
+
+# Trng, Nt
+ 30.0, 860
+

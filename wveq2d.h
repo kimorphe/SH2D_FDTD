@@ -33,6 +33,7 @@ class FIELD{
 		int Nin,Nbnd,Nex;
 		void clear();
 		void fwrite_prms(char *fn, char *mode, char *name);
+		void fwrite_bnd(char *fn);
 	private:
 };
 class SOURCE{

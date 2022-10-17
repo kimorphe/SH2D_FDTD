@@ -18,6 +18,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import numpy as np
 from mkpng import FLD
+from draw_prof import BND
+import os
 
 class ImgPrms:
     def __init__(self):
@@ -156,6 +158,11 @@ class MainWindow(QMainWindow):
                 plt.colorbar(im,cax=cax)
                 ax.set_xlabel(r"$\it{x}$[mm]",fontsize=14)
                 ax.set_ylabel(r"$\it{y}$[mm]",fontsize=14)
+                dir_name=os.path.dirname(fn)
+                bnd1=BND(dir_name+"/../q1bnd.dat",0)
+                bnd2=BND(dir_name+"/../q2bnd.dat",1)
+                bnd1.plot2(ax,clr="w")
+                bnd2.plot2(ax,clr="w")
             else:
                 im.set_data(v3.Z)
             stime=r"$t$={:6.2f}[micro sec]".format(v3.time)
