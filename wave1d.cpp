@@ -583,9 +583,29 @@ void InWv:: gen_wvfm(){
 	case 2:	// cosine function
 		gen_cos(sgn);
 		break;
+	case 3: // Ricker wavelet
+		gen_Ricker(sgn);
+		break;
+	default:
+		printf("illeagal waveform type has been specified!!\n");
+		printf(" --> abort process\n");
+		exit(-1);
 	};
 }
 
+void InWv:: gen_Ricker(double sgn){
+	double PI=4.0*atan(1.0);
+	double f0=1./T0;
+
+	double pi2=PI*PI;
+	double f2=f0*f0;
+	double t2,tt;
+	for(int i=0;i<Nt;i++){
+		tt=t1+dt*i-T0;
+		t2=tt*tt;
+		amp[i]=(1.-2.*pi2*f2*t2)*exp(-pi2*f2*t2)*sgn;
+	};
+};
 void InWv:: gen_sin(double sgn){
 	double PI=4.0*atan(1.0);
 	double omg=2.*PI/T0,tt;

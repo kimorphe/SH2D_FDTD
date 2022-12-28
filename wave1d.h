@@ -23,6 +23,7 @@ class InWv{
 		void disp();
 		void gen_sin(double sgn);
 		void gen_cos(double sgn);
+		void gen_Ricker(double sgn);
 		void gen_wvfm();
 		void out(char *);
 		void Amod(double tb, int nsig);

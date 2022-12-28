@@ -1,5 +1,5 @@
 # Trng, dt
- 60.0, 0.07
+ 60.0, 0.05
 # tout_s, tout_e, nout (output control: time window & steps)
   0.0, 60.0, 60
 # Initial Condition 

@@ -1,5 +1,5 @@
-# wave type (0: zero, 1:sin 2:cos )
- 2
+# wave type (0: zero, 1:sin 2:cos, 3: Ricker wavelet )
+ 3
 # Nt (number of data)
  251
 # T0, nbrst (fundamental period, burst cycles)
@@ -7,6 +7,6 @@
 # kn (narrowness factor for Gaussian amplitude modulation)
  4
 # t1, t2
- 0.0 10.0
+ 0.0 5.0
 # amp (read only when negatie wave type is specified)
 

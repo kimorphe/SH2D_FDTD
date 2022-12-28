@@ -13,6 +13,7 @@
 <h2>Binary</h2>
 <ul>
 	<li>wveq2d: 2D, SH-wave FDTD</li>
+	<li>mkary: src.inp, array.inpのテキストデータを作成(--> src.txt, array.txt)</li>
 </ul>
 <h2>C/C++ Programs</h2>
 	<ul>
@@ -30,6 +31,7 @@
 			な場合はTRNSDCRクラスを転用してい作成する予定(9/16)
 		</li>
 		<li>Waveform class: <a href="./wave1d.cpp">wave1d.cpp</a> </li>
+		<li>Text formatter: Src-array setting <a href="./mkary.cpp">mkary.cpp</a></li>
 		<li>makefile: <a href="./makefile">makefile</a> </li>
 		</ul>
 	<li>Input Files:</li>
@@ -231,6 +233,16 @@
 			始終起きる問題:最新版がローカルかGitHubのものかわからなくなること．<br>
 			Dataフォルダの自動生成(T0,T1,...)機能を追加<br>
 			--> sys/stat.hからmkdir(dir_name,0777)で作成. Demo5のデータで動作確認<br>
+		</li>
+		<li> 12/28(Wed.)<br>
+			教科書用データの作成開始<br>
+			Book/domai.odsで分割数を計算<br>
+			形状設定の関数を追加(DOMAIN::perfo_tight, Cut, WireCut)<br>
+			DOMAIN::Cutでsine waveのき裂モデルを作成<br>
+			Ricker波の計算(ricker.pyで波形とスペクトルを確認, InWv::gen_Rickerで計算)<br>
+			入力補助プログラムの作成(mkary.cpp --> src.txt, array.txt)src.inp, array.inpのテキスト生成(full-mat. cap.の場合のみ)<br>
+			32素子アレイでの計算が可能な(動作する)ことを確認(Book以下のデータ)<br>
+			bscan.pyを一部修正(colormapでのB-scan表示)<br>
 		</li>
 	</ul>
 <h2>開発項目:</h2>

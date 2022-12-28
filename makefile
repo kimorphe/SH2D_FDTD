@@ -1,4 +1,4 @@
-all: wveq2d
+all: wveq2d mkary
 
 wveq2d: domain.o field.o main.o cntrl.o wave1d.o source.o 
 	g++ -o wveq2d main.o domain.o field.o cntrl.o wave1d.o source.o  
@@ -21,3 +21,7 @@ source.o: source.cpp wveq2d.h
 	g++ -c source.cpp
 #receiver.o: receiver.cpp wveq2d.h
 #	g++ -c receiver.cpp
+#
+
+mkary: mkary.cpp
+	g++ -o mkary mkary.cpp

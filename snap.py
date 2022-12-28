@@ -52,7 +52,7 @@ if __name__=="__main__":
     fig=plt.figure()
     ax=fig.add_subplot(111)
 
-    nums=np.arange(0,21,1)
+    nums=np.arange(0,61,2)
     print(nums)
     for k in nums:
         fname="v3_"+str(k)+".out"
