@@ -7,6 +7,8 @@ class FLD:
         fp=open(fname,"r")
 
         cmt=fp.readline()
+        time=float(fp.readline())
+        cmt=fp.readline()
         dat=fp.readline().strip().split(",");
         x=float(dat[0]); y=float(dat[1])
         Xa=[x,y]

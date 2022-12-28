@@ -2,15 +2,23 @@
 #include<stdlib.h>
 #include<math.h>
 #include"wveq2d.h"
+#include<sys/stat.h>
 
 //--------------------------------------------------------------------------
 void FIELD::fwrite_trim(int d_num, int num, int *NHa, int *NHb, double tout){
 	char fname[128];
+	char dir_name[128];
 	if(type==0) sprintf(fname,"T%d/v3_%d.out",d_num,num);
 	if(type==1) sprintf(fname,"T%d/q1_%d.out",d_num,num);
 	if(type==2) sprintf(fname,"T%d/q2_%d.out",d_num,num);
 	FILE *fp=fopen(fname,"w");
-	if(fp==NULL) show_msg(fname);
+	if(fp==NULL){
+		sprintf(dir_name,"T%d",d_num);
+		mkdir(dir_name,0777);
+		printf("Data directory %s has been created.\n",dir_name);
+		fp=fopen(fname,"w");
+		if(fp==NULL) show_msg(fname);
+	}
 	int i,j;
 	double xll[2], wdt[2];
 	int ngs[2];

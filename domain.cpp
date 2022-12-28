@@ -100,7 +100,6 @@ void DOMAIN::perfo_ellip(char *fname){
 	while(fgets(cbff,8,fp) !=NULL){
 		if(strcmp(cbff,"##Ellip")==0){
 			fscanf(fp,"%lf, %lf, %lf, %lf\n",xc,xc+1,&a,&b);
-			printf("%lf %lf %lf %lf\n",xc[0],xc[1],a,b);
 
 			for(i=0;i<Ndiv[0];i++){
 				xcod[0]=Xa[0]+dx[0]*(i+0.5);	
@@ -112,6 +111,105 @@ void DOMAIN::perfo_ellip(char *fname){
 			}
 			}
 		}
+	};
+	fclose(fp);
+};
+void DOMAIN::perfo_tight(double xc[2],double rd){
+	int i,j;
+	double xcod[2];
+	double xx,yy;
+
+	int i1=int((xc[0]-rd-Xa[0])/dx[0])-1;
+	int j1=int((xc[1]-rd-Xa[1])/dx[1])-1;
+	int i2=int((xc[0]+rd-Xa[0])/dx[0])+1;
+	int j2=int((xc[1]+rd-Xa[1])/dx[1])+1;
+
+	if(i1<0) i1=0;
+	if(j1<0) j1=0;
+	if(i2>=Ndiv[0]-1) i2=Ndiv[0]-1;
+	if(j2>=Ndiv[1]-1) j2=Ndiv[1]-1;
+
+	for(i=i1; i<=i2; i++){
+		xcod[0]=Xa[0]+dx[0]*(i+0.5);	
+	for(j=j1; j<=j2; j++){
+		xcod[1]=Xa[1]+dx[1]*(j+0.5);
+		xx=(xcod[0]-xc[0])/rd;
+		yy=(xcod[1]-xc[1])/rd;
+		if(xx*xx+yy*yy <1.0) kcell[i][j]=1;
+	}
+	}
+
+};
+void DOMAIN::WireCut(double xc1[2], double xc2[2],double rd){
+	int Nstep;
+	int i,j,k;
+
+	double xc[2],dxc[2];
+	double rx=xc2[0]-xc1[0];
+	double ry=xc2[1]-xc1[1];
+	double rr=sqrt(rx*rx+ry*ry);
+	Nstep=int(rr/dx[0]);
+	dxc[0]=rx/(Nstep-1);
+	dxc[1]=ry/(Nstep-1);
+
+	for(i=0;i<Nstep;i++){
+		xc[0]=xc1[0]+dxc[0]*i;
+		xc[1]=xc1[1]+dxc[1]*i;
+		DOMAIN::perfo_tight(xc,rd);
+	};
+};
+void DOMAIN::Cut(char *fname){
+	FILE *fp=fopen(fname,"r");
+	if(fp==NULL) show_msg(fname); 
+	char cbff[7];
+
+	double xc[2];	// position 
+	double Lx;	// slit wave length
+	double Ay;	// amplitude
+
+	double PI=atan(1.0)*4.0;
+	double wd;	// width
+	double rd;// half width
+	int Nstep;
+	double dx0,x0[2],ddx;
+
+	int i,j,nseg=16,Npnt_x,Npnt_y;
+	double xs[2],xe[2],rx,ry;
+	double kx;
+
+	while(fgets(cbff,7,fp) !=NULL){
+		if(strcmp(cbff,"##Wire")==0){
+			fscanf(fp,"%lf, %lf\n",xc, xc+1);
+			fscanf(fp,"%lf, %lf, %lf\n",&Lx,&Ay,&wd);
+			rd=wd*0.5;
+
+			kx=2.*PI/Lx;	// wave number
+			dx0=Lx/nseg;	// segment x-width
+			for(i=0;i<nseg;i++){
+				xs[0]=-0.5*Lx+i*dx0;
+				xs[1]=Ay*sin(kx*xs[0]);
+				xe[0]=xs[0]+dx0;
+				xe[1]=Ay*sin(kx*xe[0]);
+				rx=dx0;
+				ry=xe[1]-xs[1];
+
+				Npnt_x=ceil(fabs(rx/dx[0]));
+				Npnt_y=ceil(fabs(ry/dx[1]));
+				Nstep=Npnt_x;
+				if(Nstep < Npnt_y) Nstep=Npnt_y;
+
+				ddx=0.0;
+				if(Nstep>1) ddx=rx/(Nstep-1);
+				//printf("Nstep=%d, ddx=%lf\n",Nstep,ddx);
+				for(j=0;j<Nstep;j++){
+					x0[0]=ddx*j+xs[0];
+					x0[1]=Ay*sin(kx*x0[0]);
+					x0[0]+=xc[0];
+					x0[1]+=xc[1];
+					DOMAIN::perfo_tight(x0,rd);
+				};		
+			};
+		};
 	};
 	fclose(fp);
 };

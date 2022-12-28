@@ -21,6 +21,7 @@ int main(int argc, char *argv[]){
 	ctr.array_setting(farry);
 	printf("*****************************\n");
 	
+	exit(-1);
 	int it,isum,m;
 	
 	for(m=0;m<ctr.ary.nmeas;m++){

@@ -17,7 +17,10 @@ git add Demo*/inwv0.dat
 git add Demo*/*.txt
 git add Demo*/*.html
 git add Demo*/Figs/*
-#git add Demo1/*.sh
+
+git add Book/*.inp
+git add Book/inwv0.dat
+git add Book/*.ods
 
 git add Qt/*.py
 

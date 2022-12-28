@@ -78,6 +78,11 @@ void CNTRL::setup_domain(char *fname){
 	dm.perfo_ellip(fname);
 	dm.slit(fname);
 	dm.topography(fname);
+	//double xtmp1[2]={10.0,12.0};
+	//double xtmp2[2]={6.0,6.0};
+	//dm.WireCut(xtmp1,xtmp2,0.2);
+	dm.Cut(fname);
+
 	dm.out_kcell();		// write kcell data 
 	printf(" -->kcell.dat\n");
 	dm.fwrite();	// write domain setting

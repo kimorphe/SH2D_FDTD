@@ -134,6 +134,9 @@ class DOMAIN{
 		double dt;	// time step
 		void perfo_ellip(char *fname); // domain perforation
 		void slit(char *fname); //domain perforation
+		void perfo_tight(double xc[2], double rd);
+		void Cut(char *fname);
+		void WireCut(double xc1[2], double xc2[2], double rd);
 		void out_kcell(); // write geometry(kcell) data
 		void topography(char *fname); // set surface topography
 		int find_q1bnd(int nx, double y); // find boundary v1-grid 
