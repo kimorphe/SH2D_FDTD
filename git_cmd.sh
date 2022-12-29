@@ -21,6 +21,11 @@ git add Demo*/Figs/*
 git add Book/*.inp
 git add Book/inwv0.dat
 git add Book/*.ods
+git add Book/SAFT/*.cpp
+git add Book/SAFT/*.h
+git add Book/SAFT/makefile
+git add Book/SAFT/*.py
+git add Book/SAFT/*.html
 
 git add Qt/*.py
 

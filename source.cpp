@@ -91,8 +91,10 @@ void TRNSDCR::fwrite_setting(char *fn, char *mode, int num){
 	if(type==1) xofst=0.0;
 	if(type==2) yofst=0.0;
 	fprintf(fp,"# waveform ID=%d\n",iwv);
-	fprintf(fp,"# ng=%d\n",ng);
 	fprintf(fp,"# index (i,j),  coordinate (x,y)\n");
+	fprintf(fp,"# ng (number of T/R grid \n");
+	fprintf(fp," %d\n",ng);
+	fprintf(fp,"# index[2], xcod, ycod\n");
 	for(int i=0;i<ng;i++){
 		//printf("(i,j)=(%d, %d) ",isrc[i],jsrc[i]);
 		x=Xa[0]+(isrc[i]+xofst)*dx[0];
