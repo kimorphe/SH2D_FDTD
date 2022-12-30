@@ -1,21 +1,5 @@
 
 void show_msg(char *fn);
-/*
-class Recs{
-	public:
-		int nrec; // number of receiver points
-		double xr1[2]; // start
-		double xr2[2]; // end --> equi-spaced nrec receivers will be generated
-		void set_xr1(double x, double y);
-		void set_xr2(double x, double y);
-		void gen(int n);
-		double *xr,*yr,*tf;
-		double dxr[2];
-		void print_cods();
-		void set_tof(double val);
-	private:
-};
-*/
 class Array{
 	public:
 		int nele; // number of receiver points
@@ -25,9 +9,16 @@ class Array{
 		bool *actv;
 		int *isrc;
 		void load();
-		void setup();
+		void setup(char path_name[128]);
+		char path[128];
 		double xin[2];
 		double *set_transmitter(int iscan);
+		void set_angles(double xc, double yc);
+		double *thij;
+		double th_min,th_max,dth;
+		int *hist,nbin;
+		int get_hist_val(int ktr);
+
 	private:
 		void mem_alloc();
 };
@@ -35,7 +26,8 @@ class Array{
 class Bscan{
 	public:
 		bool alloc;
-		Bscan();
+		Bscan(char path_name[128]);
+		char path[128];
 		char fname[128];
 		int Ny;
 		double y0,dy;
@@ -45,35 +37,16 @@ class Bscan{
 		void fwrite_Bscan();
 		double get_amp(int iele, double tt);
 
-		double *amp_sum;
-		double stack_Ascans(double* delay);
-		void fwrite_Ascan(char fname[128]);
-		void load(int tnum);
+		//double *amp_sum;
+		//double stack_Ascans(double* delay);
+		//void fwrite_Ascan(char fname[128]);
+		void load(int tnum,int wv_typ);
 		void mem_alloc();
-		double tof;
-		int ntof;
-		double get_Asum(int inc_ntof);
+		//double tof;
+		//int ntof;
+		//double get_Asum(int inc_ntof);
 	private:
 };
-/*
-class Plate{
-	public:
-		double zb;	//bottom surface
-		double zt;	//top surface
-		double ht;	//plate thickness
-		double zs[2];
-		Plate(double z_bottom, double z_top);
-		double mirror(double zf, int ud, int nref);
-		double path(double xs[2],double xr[2], int ud, int nref);
-		double TOF(double xs[2],double xr[2], int ud, int nref,double c);
-		void TOFs(int ud, int nref,double c);
-		void write_tx(char fn[128],char mode[2]);
-		Recs rcv;	// receiver points
-		double xs[2];	// source point
-		void set_src(double x,double y);
-	private:
-};
-*/
 
 class IMG{
 	public:

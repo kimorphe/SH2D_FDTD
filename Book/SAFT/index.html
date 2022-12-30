@@ -18,6 +18,37 @@
 	<li><a href="img.cpp">img.cpp</a> </li>
 	<li><a href="saft.h">saft.h</a> </li>
 </ul>
+<h2>Python Script</h2>
+<ul>
+	<li> <a href="saft.py">saft.py</a>(SAFT imageの表示)</li>	
+	<li> <a href="corBwv.py">corBwv.py</a>(相関波形の計算(波形の前処理)T*/ary.out--> T*/ary_cor.out)</li>	
+</ul>
+<h2>I/O</h2>
+<ul>
+	<li> Imaging by "saft": <a href="saft.inp">saft.inp</a> --> 
+	<a href="saft.out">saft.out</a></li>
+	<li> Get correlated waveforms by <a href="corBwv.py">corBwv.py</a>:
+		T*/ary.out --> T*/ary_cor.out
+	</li>
+	<li> Show SAFT image "saft.out" by <a href="saft.py">saft.py</a></li>
+</ul>
+<h2>History</h2>
+<ul>
+	<li>2022/12/30(Fri)<br>
+		SAFTプログラムの仕上げ<br>
+		観測角度の計算とhistogram生成をArrayクラスのmethodとして実施<br>
+	</li>
+	<li>2022/12/29(Thr.)<br>
+		B-scan波形の画像化前処理(corBwv.py)プログラム<br>
+		pulse-echoモードの波形初動を切り出して参照波形として使用<br>
+		B-scan波形との相関関数を計算(時間軸調整の効果)<br>
+		相関波形をT*/ary_cor.outとして保存−−>SAFT imagingへ<br>
+		SAFTプログラムの修正:観測角度(k-vector)の角度分布を考慮して波形に重み付け
+	</li>
+	<li>2022/12/28(Wed.)<br>
+		FDデータを使ったSAFT(C/C++)プログラムを作成
+	</li>
+</ul>
 </body>
 
 </html>

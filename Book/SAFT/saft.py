@@ -26,6 +26,6 @@ print(np.shape(K))
 
 fig=plt.figure()
 ax=fig.add_subplot(111)
-im=ax.imshow(K,origin="lower",extent=[Xa[0],Xb[0],Xa[1],Xb[1]],interpolation="bilinear",cmap="jet")
+im=ax.imshow(K,origin="lower",extent=[Xa[0],Xb[0],Xa[1],Xb[1]],interpolation="none",cmap="jet")
 
 plt.show()

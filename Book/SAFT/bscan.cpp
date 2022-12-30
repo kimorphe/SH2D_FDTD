@@ -2,13 +2,16 @@
 #include<stdlib.h>
 #include"saft.h"
 
-Bscan::Bscan(){
+Bscan::Bscan(char path_name[128]){
 	t0=0.0;
 	alloc=false;
+	sprintf(path,"%s",path_name);
 };
-void Bscan::load(int tnum){
-	char fname[128];
-	sprintf(fname,"../Book/T%d/ary.out",tnum);
+void Bscan::load(int tnum,int wv_typ){
+	char fname[256];
+	//sprintf(fname,"../Book/T%d/ary.out",tnum);
+	if(wv_typ==0) sprintf(fname,"%s/T%d/ary.out",path,tnum);
+	if(wv_typ==1) sprintf(fname,"%s/T%d/ary_cor.out",path,tnum);
 	FILE *fp=fopen(fname,"r");
 	if(fp==NULL) show_msg(fname);
 
@@ -44,8 +47,8 @@ void Bscan::mem_alloc(){
 	for(i=0;i<Nt*Ny;i++) pt[i]=0.0;
 	for(i=0;i<Ny;i++) amp[i]=pt+Nt*i;
 
-	amp_sum=(double *)malloc(sizeof(double)*Nt);
-	for(i=0;i<Nt;i++) amp_sum[i]=0.0;
+	//amp_sum=(double *)malloc(sizeof(double)*Nt);
+	//for(i=0;i<Nt;i++) amp_sum[i]=0.0;
 
 	alloc=true;
 
@@ -79,9 +82,7 @@ double Bscan::get_amp(int iele, double time){
 	return(a1*(1.-xi)+a2*xi);
 };
 
-
-
-
+/*
 double Bscan::stack_Ascans(double *tofs){
 	int i,j,jd;
 	double idly;
@@ -125,4 +126,4 @@ void Bscan::fwrite_Ascan(char fname[128]){
 	fprintf(fp,"%lf %lf\n",tof,-5.0);
 	fclose(fp);
 };
-
+*/

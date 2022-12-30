@@ -1,0 +1,21 @@
+# path to array setting 
+../
+# path tor data folder
+../SineCrack
+# output file name
+saft.out
+# use 0:raw, 1: pre-processed waveforms
+ 1
+# imaging area  (center[2]\n, size[2]=width x height)
+ 0.0, 15.0
+ 20.0, 15.0
+# image size Ng[2], (number of pixels)
+ 201, 151
+# wave speed 
+ 1.0
+# weight (0:uniform, 1:angle coverage considred)
+ 0
+
+
+
+../Cavity
